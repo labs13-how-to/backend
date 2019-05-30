@@ -19,9 +19,9 @@ exports.up = function(knex, Promise) {
     post_steps.text('instruction')
         .notNullable()
         
-    post_steps.sting('img_url');
+    post_steps.string('img_url');
 
-    post_steps.sting('vid_url');
+    post_steps.string('vid_url');
   })
 };
 
