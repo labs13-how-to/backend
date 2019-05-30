@@ -6,67 +6,81 @@
 
 # API Documentation
 
-#### 1️⃣ Backend delpoyed at [🚫name service here](🚫add URL here) <br>
+#### 1️⃣ Backend deployed at [🚫name service here](🚫add URL here) <br>
 
 ## 1️⃣ Getting started
 
 To get the server running locally:
-
-🚫 adjust these scripts to match your project
 
 - Clone this repo
 - **yarn install** to install all required dependencies
 - **yarn server** to start the local server
 - **yarn test** to start server using testing environment
 
-### Backend framework goes here
+### Node.js and Express
 
-🚫 Why did you choose this framework?
-
--    Point One
--    Point Two
--    Point Three
--    Point Four
+-    These are what everyone on the team is most familiar with.
+-    It is more dynamic and easier to read than other frameworks.
+-    Express gives us route support.
+-    Node.js is known for offering high performance, and the freedom to develop without restrictions.
+-    Express offers lightweight middleware support for routes.
 
 ## 2️⃣ Endpoints
 
-🚫This is a placeholder, replace the endpoints, access controll, and descriptioin to match your project
-
-#### Organization Routes
+#### Posts Routes
 
 | Method | Endpoint                | Access Control | Description                                  |
 | ------ | ----------------------- | -------------- | -------------------------------------------- |
-| GET    | `/organizations/:orgId` | all users      | Returns the information for an organization. |
-| PUT    | `/organizatoins/:orgId` | owners         | Modify an existing organization.             |
-| DELETE | `/organizations/:orgId` | owners         | Delete an organization.                      |
+| GET    | `/posts`                | all posts      | Returns the information for an post.         |
+| GET:id | `/posts/:id`            | specific post  | Returns the information for an post.         |
+| POST   | `/posts`                | owners         | Create a new post.                           |
+| PUT    | `/posts/:id`            | owners         | Modify an existing post.                     |
+| DELETE | `/posts/:id`            | owners         | Delete an post.                              |
 
 #### User Routes
 
 | Method | Endpoint                | Access Control      | Description                                        |
 | ------ | ----------------------- | ------------------- | -------------------------------------------------- |
-| GET    | `/users/current`        | all users           | Returns info for the logged in user.               |
-| GET    | `/users/org/:userId`    | owners, supervisors | Returns all users for an organization.             |
-| GET    | `/users/:userId`        | owners, supervisors | Returns info for a single user.                    |
-| POST   | `/users/register/owner` | none                | Creates a new user as owner of a new organization. |
-| PUT    | `/users/:userId`        | owners, supervisors |                                                    |
-| DELETE | `/users/:userId`        | owners, supervisors |                                                    |
+| GET    | `/users`                | all users           | Returns info for the logged in user.               |
+| GET:id | `/users/:id`            | users, supervisors  | Returns info for a single user.                    |
+| POST   | `/users/login`          | none                | Allows a registered user to login.                 |
+| POST   | `/users/register`       | none                | Creates a new registered user.                     |
+| PUT    | `/users/:id`            | owners, supervisors | Modify existing user info.                         |
+| DELETE | `/users/:id`            | owners, supervisors | Delete an existing user account.                   |
+
+#### Tags Routes
+
+| Method | Endpoint                | Access Control      | Description                                        |
+| ------ | ----------------------- | ------------------- | -------------------------------------------------- |
+| GET    | `/tags`                 | all tags            | Returns all available tags.                        |
+
+#### Reviews Routes
+
+| Method | Endpoint                | Access Control      | Description                                        |
+| ------ | ----------------------- | ------------------- | -------------------------------------------------- |
 
 # Data Model
 
-🚫This is just an example. Replace this with your data model
-
-#### 2️⃣ ORGANIZATIONS
+#### 2️⃣ POSTS
 
 ---
 
 ```
 {
-  id: UUID
-  name: STRING
-  industry: STRING
-  paid: BOOLEAN
-  customer_id: STRING
-  subscription_id: STRING
+  id, 
+  user_id,
+  image, 
+  video, 
+  description, 
+  instruction, 
+  average_rating, 
+	ratings:[{ user_id, rating}],
+  keywords/tags, 
+  tools/supplies, 
+  prerequisite skills, 
+  time, 
+  difficulty,
+  created timestamp
 }
 ```
 
@@ -76,17 +90,14 @@ To get the server running locally:
 
 ```
 {
-  id: UUID
-  organization_id: UUID foreign key in ORGANIZATIONS table
-  first_name: STRING
-  last_name: STRING
-  role: STRING [ 'owner', 'supervisor', 'employee' ]
-  email: STRING
-  phone: STRING
-  cal_visit: BOOLEAN
-  emp_visit: BOOLEAN
-  emailpref: BOOLEAN
-  phonepref: BOOLEAN
+  id, 
+  username,
+  password,
+  role,
+  following: [user_id’s],
+  followers: [user_id’s],
+  favorites: [post_id’s],
+  created timestamp
 }
 ```
 
