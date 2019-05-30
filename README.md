@@ -6,7 +6,7 @@
 
 # API Documentation
 
-#### 1️⃣ Backend deployed at [🚫name service here](🚫add URL here) <br>
+#### 1️⃣ Backend deployed at [Heroku](https://lambda-how-to.herokuapp.com/) <br>
 
 ## 1️⃣ Getting started
 
