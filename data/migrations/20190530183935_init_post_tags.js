@@ -11,7 +11,7 @@ exports.up = function(knex, Promise) {
       .onDelete('CASCADE')
       .onUpdate('CASCADE');
 
-      post_tags.integer('tag_id')
+    post_tags.integer('tag_id')
       .unsigned()
       .notNullable()
       .references('id')
