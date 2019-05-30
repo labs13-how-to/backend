@@ -1,0 +1,36 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend repository for project: How To",
+  "main": "index.js",
+  "repository": "https://github.com/labs13-how-to/backend",
+  "authors": "Austin James, Matt Poloni, Nick Stricker and Patrick Steveson",
+  "scripts": {
+    "server": "nodemon index.js",
+    "test": "cross-env DB_ENV=testing jest --watch",
+    "start": "node index.js"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.14.0",
+    "cors": "^2.8.5",
+    "cross-env": "^5.2.0",
+    "datauri": "^2.0.0",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "helmet": "^3.18.0",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.17.0",
+    "multer": "^1.4.1",
+    "pg": "^7.11.0",
+    "sqlite3": "^4.0.8"
+  },
+  "devDependencies": {
+    "jest": "^24.8.0",
+    "nodemon": "^1.19.1",
+    "supertest": "^4.0.2"
+  }
+}
