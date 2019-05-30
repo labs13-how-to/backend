@@ -1,8 +1,8 @@
 exports.up = function(knex, Promise) {
-  return knex.schema.createTable('followers', followers => {
-    followers.increments();
+  return knex.schema.createTable('user_favorites', user_favorites => {
+    user_favorites.increments();
 
-    followers.integer('follower_id')
+    user_favorites.integer('user_id')
       .unsigned()
       .notNullable()
       .references('id')
@@ -10,16 +10,16 @@ exports.up = function(knex, Promise) {
       .onDelete('CASCADE')
       .onUpdate('CASCADE');
 
-    followers.integer('following_id')
+    user_favorites.integer('post_id')
       .unsigned()
       .notNullable()
       .references('id')
-      .inTable('users')
+      .inTable('posts')
       .onDelete('CASCADE')
       .onUpdate('CASCADE');
   })
 };
 
 exports.down = function(knex, Promise) {
-    return knex.schema.dropTableIfExists('followers');
+    return knex.schema.dropTableIfExists('user_favorites');
 };
