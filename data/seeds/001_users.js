@@ -7,7 +7,8 @@ const generateSeeds = () => {
     arr.push({
       //.findName() creates a full name (first and last)
       username: faker.name.findName(),
-      password: faker.lorem.word()
+      password: faker.lorem.word(),
+      role: "user"
     });
   }
   return arr;

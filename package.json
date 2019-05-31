@@ -21,6 +21,7 @@
     "datauri": "^2.0.0",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
+    "faker": "^4.1.0",
     "helmet": "^3.18.0",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.17.0",
@@ -29,7 +30,6 @@
     "sqlite3": "^4.0.8"
   },
   "devDependencies": {
-    "faker": "^4.1.0",
     "jest": "^24.8.0",
     "nodemon": "^1.19.1",
     "supertest": "^4.0.2"
