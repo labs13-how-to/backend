@@ -29,6 +29,7 @@
     "sqlite3": "^4.0.8"
   },
   "devDependencies": {
+    "faker": "^4.1.0",
     "jest": "^24.8.0",
     "nodemon": "^1.19.1",
     "supertest": "^4.0.2"
