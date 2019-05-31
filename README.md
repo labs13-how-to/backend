@@ -192,7 +192,7 @@ create a .env file that includes the following:
 🚫 These are just examples, replace them with the specifics for your app
     
     *  PORT - what port the server will run on
-    *  HOST - set to "localhost" for "development" and "testing"
+    *  HOST - set to "localhost" for "development" and "testing" environments
     *  DB_DEV - the name of the local PostgreSQL database cluster for development
     *  DB_TEST - the name of the local PostgreSQL database cluster for testing
     *  USER - the username set for your local PostgreSQL server
