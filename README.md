@@ -1,9 +1,3 @@
-🚫 Note: All lines that start with 🚫 are instructions and should be deleted before this is posted to your portfolio. This is intended to be a guideline. Feel free to add your own flare to it.
-
-🚫 The numbers 1️⃣ through 3️⃣ next to each item represent the week that part of the docs needs to be comepleted by.  Make sure to delete the numbers by the end of Labs.
-
-🚫 Each student has a required minimum number of meaningful PRs each week per the rubric.  Contributing to docs does NOT count as a PR to meet your weekly requirements.
-
 # API Documentation
 
 #### 1️⃣ Backend deployed at [Heroku](https://lambda-how-to.herokuapp.com/) <br>
@@ -27,16 +21,6 @@ To get the server running locally:
 
 ## 2️⃣ Endpoints
 
-#### Posts Routes
-
-| Method | Endpoint                | Access Control | Description                                  |
-| ------ | ----------------------- | -------------- | -------------------------------------------- |
-| GET    | `/posts`                | all posts      | Returns the information for an post.         |
-| GET:id | `/posts/:id`            | specific post  | Returns the information for an post.         |
-| POST   | `/posts`                | owners         | Create a new post.                           |
-| PUT    | `/posts/:id`            | owners         | Modify an existing post.                     |
-| DELETE | `/posts/:id`            | owners         | Delete an post.                              |
-
 #### User Routes
 
 | Method | Endpoint                | Access Control      | Description                                        |
@@ -47,6 +31,16 @@ To get the server running locally:
 | POST   | `/users/register`       | none                | Creates a new registered user.                     |
 | PUT    | `/users/:id`            | owners, supervisors | Modify existing user info.                         |
 | DELETE | `/users/:id`            | owners, supervisors | Delete an existing user account.                   |
+
+#### Posts Routes
+
+| Method | Endpoint                | Access Control | Description                                  |
+| ------ | ----------------------- | -------------- | -------------------------------------------- |
+| GET    | `/posts`                | all posts      | Returns the information for an post.         |
+| GET:id | `/posts/:id`            | specific post  | Returns the information for an post.         |
+| POST   | `/posts`                | owners         | Create a new post.                           |
+| PUT    | `/posts/:id`            | owners         | Modify an existing post.                     |
+| DELETE | `/posts/:id`            | owners         | Delete an post.                              |
 
 #### Tags Routes
 
@@ -59,30 +53,7 @@ To get the server running locally:
 | Method | Endpoint                | Access Control      | Description                                        |
 | ------ | ----------------------- | ------------------- | -------------------------------------------------- |
 
-# Data Model
-
-#### 2️⃣ POSTS
-
----
-
-```
-{
-  id, 
-  user_id,
-  image, 
-  video, 
-  description, 
-  instruction, 
-  average_rating, 
-	ratings:[{ user_id, rating}],
-  keywords/tags, 
-  tools/supplies, 
-  prerequisite skills, 
-  time, 
-  difficulty,
-  created timestamp
-}
-```
+# 2️⃣ Data Model
 
 #### USERS
 
@@ -90,56 +61,132 @@ To get the server running locally:
 
 ```
 {
-  id, 
-  username,
-  password,
-  role,
-  following: [user_id’s],
-  followers: [user_id’s],
-  favorites: [post_id’s],
-  created timestamp
+  id: INTEGER, 
+  username: STRING,
+  password: STRING,
+  role: STRING,
+  created_at: TIMESTAMP WITHOUT TIMEZONES
+}
+```
+
+#### POSTS
+
+---
+
+```
+{
+  id: INTEGER,
+  title: STRING,
+  img_url: STRING,
+  description: TEXT,
+  difficulty: STRING,
+  duration: STRING,
+  skills: TEXT,
+  supplies: TEXT,
+  created_by: INTEGER foreign key in USERS table,
+  created_at: TIMESTAMP WITHOUT TIMEZONES
+}
+```
+
+#### POST_STEPS
+
+---
+
+```
+{
+  id: INTEGER,
+  post_id: INTEGER foreign key in POSTS table,
+  step_num: INTEGER,
+  title: STRING,
+  instruction: TEXT,
+  img_url: STRING,
+  vid_url: STRING
+}
+```
+
+#### TAGS
+
+---
+
+```
+{
+  id: INTEGER,
+  name: STRING
+}
+```
+
+#### POST_TAGS
+
+---
+
+```
+{
+  id: INTEGER,
+  post_id: INTEGER foreign key in POSTS table,
+  tag_id: INTEGER foreign key in TAGS table
+}
+```
+
+#### USER_POST_REVIEWS
+
+---
+
+```
+{
+  id: INTEGER,
+  user_id: INTEGER foreign key in USERS table,
+  post_id: INTEGER foreign key in POSTS table,
+  rating: INTEGER,
+  review: TEXT,
+}
+```
+
+#### FOLLOWERS
+
+---
+
+```
+{
+  id: INTEGER,
+  follower_id: INTEGER foreign key in USERS table,
+  following_id: INTEGER foreign key in USERS table
+}
+```
+
+#### USER_FAVORITES
+
+---
+
+```
+{
+  id: INTEGER,
+  user_id: INTEGER foreign key in USERS table,
+  post_id: INTEGER foreign key in POSTS table
 }
 ```
 
 ## 2️⃣ Actions
 
-🚫 This is an example, replace this with the actions that pertain to your backend
+`getAllUsers()` -> Returns all registered users
 
-`getOrgs()` -> Returns all organizations
+`getUserById(id)` -> Returns a specified user by Id
 
-`getOrg(orgId)` -> Returns a single organization by ID
+`getAllPosts()` -> Returns all created posts
 
-`addOrg(org)` -> Returns the created org
-
-`updateOrg(orgId)` -> Update an organization by ID
-
-`deleteOrg(orgId)` -> Delete an organization by ID
-<br>
-<br>
-<br>
-`getUsers(orgId)` -> if no param all users
-
-`getUser(userId)` -> Returns a single user by user ID
-
-`addUser(user object)` --> Creates a new user and returns that user. Also creates 7 availabilities defaulted to hours of operation for their organization.
-
-`updateUser(userId, changes object)` -> Updates a single user by ID.
-
-`deleteUser(userId)` -> deletes everything dependent on the user
+`getPostById(id)` -> Returns a specified post by Id
 
 ## 3️⃣ Environment Variables
 
 In order for the app to function correctly, the user must set up their own environment variables.
 
 create a .env file that includes the following:
-
-🚫 These are just examples, replace them with the specifics for your app
     
-    *  STAGING_DB - optional development db for using functionality not available in SQLite
-    *  NODE_ENV - set to "development" until ready for "production"
-    *  JWT_SECRET - you can generate this by using a python shell and running import random''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#\$%^&amp;*(-*=+)') for i in range(50)])
-    *  SENDGRID_API_KEY - this is generated in your Sendgrid account
-    *  stripe_secret - this is generated in the Stripe dashboard
+    *  PORT - what port the server will run on
+    *  HOST - set to "localhost" for "development" and "testing" environments
+    *  DB_DEV - the name of the local PostgreSQL database cluster for development
+    *  DB_TEST - the name of the local PostgreSQL database cluster for testing
+    *  USER - the username set for your local PostgreSQL server
+    *  PASS - the password set for your local PostgreSQL server
     
 ## Contributing
 
@@ -179,5 +226,6 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 
 ## Documentation
 
-See [Frontend Documentation](🚫link to your frontend readme here) for details on the fronend of our project.
-🚫 Add DS iOS and/or Andriod links here if applicable.
+See [Frontend Documentation](https://github.com/labs13-how-to/frontend/blob/master/README.md) for details on the fronend of our project.
+
+See [iOS Documentation](https://github.com/labs13-how-to/ios/blob/master/README.md) for details on the iOS portion of our project.

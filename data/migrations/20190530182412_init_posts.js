@@ -11,9 +11,7 @@ exports.up = function(knex, Promise) {
     posts.text('description')
       .notNullable();
     
-    posts.enu('difficulty',
-      ['easy', 'intermediate', 'advanced', 'professional'],
-      { useNative: true, enumName: 'difficulty' })
+    posts.string('difficulty')
       .notNullable();
 
     posts.string('duration')

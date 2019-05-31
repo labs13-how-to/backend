@@ -9,6 +9,9 @@ exports.up = function(knex, Promise) {
 
     users.string('password')
       .notNullable();
+
+    users.string('role')
+      .notNullable();
     
     users.timestamp('created_at', { useTz: false })
       .notNullable()
