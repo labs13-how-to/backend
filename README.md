@@ -70,6 +70,7 @@ To get the server running locally:
   id: INTEGER, 
   username: STRING,
   password: STRING,
+  role: STRING,
   created_at: TIMESTAMP WITHOUT TIMEZONES
 }
 ```
@@ -84,7 +85,7 @@ To get the server running locally:
   title: STRING,
   img_url: STRING,
   description: TEXT,
-  difficulty: ENUMERATED as `difficulty` with possible values of ['easy', 'intermediate', 'advanced', 'professional'],
+  difficulty: STRING,
   duration: STRING,
   skills: TEXT,
   supplies: TEXT,
@@ -141,7 +142,7 @@ To get the server running locally:
   id: INTEGER,
   user_id: INTEGER foreign key in USERS table,
   post_id: INTEGER foreign key in POSTS table,
-  rating: ENUMERATED as `stars` with possible values of [1, 2, 3, 4, 5],
+  rating: INTEGER,
   review: TEXT,
 }
 ```

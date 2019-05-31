@@ -18,9 +18,7 @@ exports.up = function(knex, Promise) {
       .onDelete('CASCADE')
       .onUpdate('CASCADE');
       
-    user_post_reviews.enu('rating',
-      [1, 2, 3, 4, 5],
-      { useNative: true, enumName: 'stars' })
+    user_post_reviews.integer('rating')
       .notNullable();
 
     user_post_reviews.text('review')
