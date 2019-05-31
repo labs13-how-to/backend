@@ -120,7 +120,7 @@ To get the server running locally:
 }
 ```
 
-#### TAGS
+#### POST_TAGS
 
 ---
 
