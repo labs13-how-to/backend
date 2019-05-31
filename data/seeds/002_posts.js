@@ -1,22 +1,24 @@
 const faker = require("faker");
 
 const generatePosts = async () => {
+  const difficulty = ["easy", "intermediate", "advanced", "professional"];
   let arr = [];
 
   for (let i = 0; i <= 4; i++) {
     for (let x = 1; x <= 4; x++) {
       arr.push({
-        user_id: x,
+        created_by: x,
         title: faker.lorem.word(),
         img_url: faker.image.imageUrl(),
         description: faker.lorem.sentences(),
-        difficulty: faker.lorem.word(),
+        difficulty: difficulty[Math.floor(Math.random() * difficulty.length)],
         duration: faker.random.number(),
         skills: faker.lorem.words(),
         supplies: faker.lorem.words()
       });
     }
   }
+  return arr;
 };
 
 exports.seed = async function(knex, Promise) {
