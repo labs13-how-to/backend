@@ -61,43 +61,112 @@ To get the server running locally:
 
 # Data Model
 
-#### 2️⃣ POSTS
+#### 2️⃣ USERS
 
 ---
 
 ```
 {
-  id, 
-  user_id,
-  image, 
-  video, 
-  description, 
-  instruction, 
-  average_rating, 
-	ratings:[{ user_id, rating}],
-  keywords/tags, 
-  tools/supplies, 
-  prerequisite skills, 
-  time, 
-  difficulty,
-  created timestamp
+  id: INTEGER, 
+  username: STRING,
+  password: STRING,
+  created_at: TIMESTAMP WITHOUT TIMEZONES
 }
 ```
 
-#### USERS
+#### POSTS
 
 ---
 
 ```
 {
-  id, 
-  username,
-  password,
-  role,
-  following: [user_id’s],
-  followers: [user_id’s],
-  favorites: [post_id’s],
-  created timestamp
+  id: INTEGER,
+  title: STRING,
+  img_url: STRING,
+  description: TEXT,
+  difficulty: ENUMERATED as `difficulty` with possible values of ['easy', 'intermediate', 'advanced', 'professional'],
+  duration: STRING,
+  skills: TEXT,
+  supplies: TEXT,
+  created_by: INTEGER foreign key in USERS table,
+  created_at: TIMESTAMP WITHOUT TIMEZONES
+}
+```
+
+#### POST_STEPS
+
+---
+
+```
+{
+  id: INTEGER,
+  post_id: INTEGER foreign key in POSTS table,
+  step_num: INTEGER,
+  title: STRING,
+  instruction: TEXT,
+  img_url: STRING,
+  vid_url: STRING
+}
+```
+
+#### TAGS
+
+---
+
+```
+{
+  id: INTEGER,
+  name: STRING
+}
+```
+
+#### TAGS
+
+---
+
+```
+{
+  id: INTEGER,
+  post_id: INTEGER foreign key in POSTS table,
+  tag_id: INTEGER foreign key in TAGS table
+}
+```
+
+#### USER_POST_REVIEWS
+
+---
+
+```
+{
+  id: INTEGER,
+  user_id: INTEGER foreign key in USERS table,
+  post_id: INTEGER foreign key in POSTS table,
+  rating: ENUMERATED as `stars` with possible values of [1, 2, 3, 4, 5],
+  review: TEXT,
+}
+```
+
+#### FOLLOWERS
+
+---
+
+```
+{
+  id: INTEGER,
+  follower_id: INTEGER foreign key in USERS table,
+  following_id: INTEGER foreign key in USERS table
+}
+```
+
+#### USER_FAVORITES
+
+---
+
+```
+{
+  id: INTEGER,
+  user_id: INTEGER foreign key in USERS table,
+  post_id: INTEGER foreign key in POSTS table
 }
 ```
 
