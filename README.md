@@ -27,16 +27,6 @@ To get the server running locally:
 
 ## 2️⃣ Endpoints
 
-#### Posts Routes
-
-| Method | Endpoint                | Access Control | Description                                  |
-| ------ | ----------------------- | -------------- | -------------------------------------------- |
-| GET    | `/posts`                | all posts      | Returns the information for an post.         |
-| GET:id | `/posts/:id`            | specific post  | Returns the information for an post.         |
-| POST   | `/posts`                | owners         | Create a new post.                           |
-| PUT    | `/posts/:id`            | owners         | Modify an existing post.                     |
-| DELETE | `/posts/:id`            | owners         | Delete an post.                              |
-
 #### User Routes
 
 | Method | Endpoint                | Access Control      | Description                                        |
@@ -47,6 +37,16 @@ To get the server running locally:
 | POST   | `/users/register`       | none                | Creates a new registered user.                     |
 | PUT    | `/users/:id`            | owners, supervisors | Modify existing user info.                         |
 | DELETE | `/users/:id`            | owners, supervisors | Delete an existing user account.                   |
+
+#### Posts Routes
+
+| Method | Endpoint                | Access Control | Description                                  |
+| ------ | ----------------------- | -------------- | -------------------------------------------- |
+| GET    | `/posts`                | all posts      | Returns the information for an post.         |
+| GET:id | `/posts/:id`            | specific post  | Returns the information for an post.         |
+| POST   | `/posts`                | owners         | Create a new post.                           |
+| PUT    | `/posts/:id`            | owners         | Modify an existing post.                     |
+| DELETE | `/posts/:id`            | owners         | Delete an post.                              |
 
 #### Tags Routes
 
@@ -59,9 +59,9 @@ To get the server running locally:
 | Method | Endpoint                | Access Control      | Description                                        |
 | ------ | ----------------------- | ------------------- | -------------------------------------------------- |
 
-# Data Model
+# 2️⃣ Data Model
 
-#### 2️⃣ USERS
+#### USERS
 
 ---
 
