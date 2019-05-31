@@ -4,9 +4,17 @@ const cors = require('cors');
 
 const server = express();
 
+//Routers
+const usersRouter = require('./users/user-router.js');
+const postsRouter = require('./posts/posts-router.js');
+
 server.use(helmet());
 server.use(express.json());
 server.use(cors());
+
+//Set Routes
+server.use('/users', usersRouter);
+server.use('/posts', postsRouter)
 
 //Server Test Msg
 server.get('/', (req, res) => {
