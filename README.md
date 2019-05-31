@@ -174,27 +174,13 @@ To get the server running locally:
 
 🚫 This is an example, replace this with the actions that pertain to your backend
 
-`getOrgs()` -> Returns all organizations
+`getAllUsers()` -> Returns all registered users
 
-`getOrg(orgId)` -> Returns a single organization by ID
+`getUserById(id)` -> Returns a specified user by Id
 
-`addOrg(org)` -> Returns the created org
+`getAllPosts()` -> Returns all created posts
 
-`updateOrg(orgId)` -> Update an organization by ID
-
-`deleteOrg(orgId)` -> Delete an organization by ID
-<br>
-<br>
-<br>
-`getUsers(orgId)` -> if no param all users
-
-`getUser(userId)` -> Returns a single user by user ID
-
-`addUser(user object)` --> Creates a new user and returns that user. Also creates 7 availabilities defaulted to hours of operation for their organization.
-
-`updateUser(userId, changes object)` -> Updates a single user by ID.
-
-`deleteUser(userId)` -> deletes everything dependent on the user
+`getPostById(id)` -> Returns a specified post by Id
 
 ## 3️⃣ Environment Variables
 
@@ -204,11 +190,12 @@ create a .env file that includes the following:
 
 🚫 These are just examples, replace them with the specifics for your app
     
-    *  STAGING_DB - optional development db for using functionality not available in SQLite
-    *  NODE_ENV - set to "development" until ready for "production"
-    *  JWT_SECRET - you can generate this by using a python shell and running import random''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#\$%^&amp;*(-*=+)') for i in range(50)])
-    *  SENDGRID_API_KEY - this is generated in your Sendgrid account
-    *  stripe_secret - this is generated in the Stripe dashboard
+    *  PORT - what port the server will run on
+    *  HOST - set to "localhost" for "development" and "testing"
+    *  DB_DEV - the name of the local PostgreSQL database cluster for development
+    *  DB_TEST - the name of the local PostgreSQL database cluster for testing
+    *  USER - the username set for your local PostgreSQL server
+    *  PASS - the password set for your local PostgreSQL server
     
 ## Contributing
 

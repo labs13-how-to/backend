@@ -27,7 +27,7 @@ const dbSettings = (connection) => ({
 });
 
 module.exports = {
-  test: dbSettings(pgTest),
+  testing: dbSettings(pgTest),
   development: dbSettings(pgDev),
   production: dbSettings(process.env.DATABASE_URL)
 };
