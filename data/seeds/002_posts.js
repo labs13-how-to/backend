@@ -20,14 +20,14 @@ const generatePosts = async () => {
 };
 
 exports.seed = async function(knex, Promise) {
-  const seeds = await generatePosts();
+  const posts = await generatePosts();
 
   return (
     knex
-      // Deletes ALL existing entries
-      .raw("TRUNCATE TABLE users RESTART IDENTITY CASCADE")
+      // Deletes ALL existing entries for posts table
+      .raw("TRUNCATE TABLE posts RESTART IDENTITY CASCADE")
       .then(function() {
-        return knex("posts").insert(seeds);
+        return knex("posts").insert(posts);
       })
   );
 };

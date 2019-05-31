@@ -1,16 +1,27 @@
-const bcrypt = require("bcryptjs");
+const faker = require("faker");
 
-exports.seed = function(knex, Promise) {
-  // Deletes ALL existing entries
-  return knex
-    .raw("TRUNCATE TABLE users RESTART IDENTITY CASCADE")
-    .then(function() {
-      // Inserts seed entries
-      return knex("users").insert([
-        { username: "Austin", password: bcrypt.hashSync("password", 8) },
-        { username: "Patrick", password: bcrypt.hashSync("password", 8) },
-        { username: "Matt", password: bcrypt.hashSync("password", 8) },
-        { username: "Nick", password: bcrypt.hashSync("password", 8) }
-      ]);
+const generateSeeds = () => {
+  const numOfUsers = 500;
+  let arr = [];
+  for (let i = 0; i < numOfUsers; i++) {
+    arr.push({
+      //.findName() creates a full name (first and last)
+      username: faker.name.findName(),
+      password: faker.lorem.word()
     });
+  }
+  return arr;
+};
+
+exports.seed = async function(knex, Promise) {
+  const users = await generateSeeds();
+
+  return (
+    knex
+      // Deletes ALL existing entries for users table
+      .raw("TRUNCATE TABLE users RESTART IDENTITY CASCADE")
+      .then(function() {
+        return knex("users").insert(users);
+      })
+  );
 };
