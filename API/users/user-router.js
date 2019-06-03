@@ -34,7 +34,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-//Get all posts by user
+//Get all of the user's posts by ID
 router.get("/:id/posts", async (req, res) => {
   try {
     const posts = await db.getUserPosts(req.params.id);
