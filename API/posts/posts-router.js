@@ -34,4 +34,21 @@ router.get("/:id", (req, res) => {
         })
 });
 
+//Create New Post.
+router.post("/", (req, res) => {
+    const newPost = req.body;
+
+    if(!newPost.title && !newPost.description && !newPost.difficulty && !newPost.duration) {
+        res.status(400).json({ message: "Please provide a title, description, difficulty and duration for this post."})
+    } else {
+        db.addNew(newPost)
+        .then(post => {
+            res.status(201).json(post)
+        })
+        .catch(err => {
+            res.status(500).json(err.message)
+        })
+    };
+});
+
 module.exports = router;
