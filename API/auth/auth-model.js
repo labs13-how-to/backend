@@ -1,4 +1,4 @@
-const db = require('../basicModel');
+const db = require('../../data/dbConfig');
 
 module.exports = {
   login,
@@ -6,9 +6,9 @@ module.exports = {
 }
 
 function login(username) {
-  return db('users').where(username).returning('*').first();
+  return db('users').where(username).returning('*');
 }
 
-async function register(user) {
+function register(user) {
   return db('users').insert(user).returning('*');
 }
