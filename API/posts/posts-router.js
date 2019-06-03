@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 const db = require("./posts-model.js");
 
-//Get All Posts
+//Get All Posts.
 router.get("/", (req, res) => {
     db.getAllPosts()
         .then(posts => {
@@ -51,7 +51,7 @@ router.post("/", (req, res) => {
     };
 });
 
-//Delete A Post
+//Delete A Post.
 router.delete("/:id", (req, res) => {
     const id = req.params.id;
 
@@ -67,4 +67,23 @@ router.delete("/:id", (req, res) => {
         res.status(500).json(err.message)
     });
 });
+
+//Update a Post.
+router.put("/:id", (req, res) => {
+    const id = req.params.id;
+    const changes = req.body;
+
+    db.update(id, changes)
+    .then(changes => {
+        if(changes) {
+            res.status(200).json({ message: "This post has been successfully updated."})
+        } else {
+            res.status(404).json({ message: "The specified exercise does not exist."})
+        }
+    })
+    .catch(err => {
+        res.status(500).json(err.message)
+    })
+});
+
 module.exports = router;

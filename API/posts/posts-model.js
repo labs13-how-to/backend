@@ -5,6 +5,7 @@ module.exports = {
     getPostById,
     addNew,
     remove,
+    update
 }
 
 function getAllPosts() {
@@ -30,4 +31,17 @@ function remove(id) {
     .where({ id })
     .first()
     .del()
+};
+
+function update(id, changes) {
+    return db("posts")
+    .where({ id })
+    .update(changes)
+    .then(count => {
+        if(count > 0) {
+            return getPostById(id)
+        } else {
+            return null;
+        }
+    })
 };
