@@ -13,38 +13,39 @@ To get the server running locally:
 
 ### Node.js and Express
 
--    These are what everyone on the team is most familiar with.
--    It is more dynamic and easier to read than other frameworks.
--    Express gives us route support.
--    Node.js is known for offering high performance, and the freedom to develop without restrictions.
--    Express offers lightweight middleware support for routes.
+- These are what everyone on the team is most familiar with.
+- It is more dynamic and easier to read than other frameworks.
+- Express gives us route support.
+- Node.js is known for offering high performance, and the freedom to develop without restrictions.
+- Express offers lightweight middleware support for routes.
 
 ## 2️⃣ Endpoints
 
 #### User Routes
 
-| Method | Endpoint                | Access Control      | Description                                        |
-| ------ | ----------------------- | ------------------- | -------------------------------------------------- |
-| GET    | `/users`                | all users           | Returns info for the logged in user.               |
-| GET:id | `/users/:id`            | users, supervisors  | Returns info for a single user.                    |
-| POST   | `/users/login`          | none                | Allows a registered user to login.                 |
-| POST   | `/users/register`       | none                | Creates a new registered user.                     |
-| PUT    | `/users/:id`            | owners, supervisors | Modify existing user info.                         |
-| DELETE | `/users/:id`            | owners, supervisors | Delete an existing user account.                   |
+| Method | Endpoint          | Access Control      | Description                          |
+| ------ | ----------------- | ------------------- | ------------------------------------ |
+| GET    | `/users`          | all users           | Returns info for the logged in user. |
+| GET:id | `/users/:id`      | users, supervisors  | Returns info for a single user.      |
+| POST   | `/users/login`    | none                | Allows a registered user to login.   |
+| POST   | `/users/register` | none                | Creates a new registered user.       |
+| PUT    | `/users/:id`      | owners, supervisors | Modify existing user info.           |
+| DELETE | `/users/:id`      | owners, supervisors | Delete an existing user account.     |
 
 #### Posts Routes
 
-| Method | Endpoint                | Access Control | Description                                  |
-| ------ | ----------------------- | -------------- | -------------------------------------------- |
-| GET    | `/posts`                | all posts      | Returns the information for an post.         |
-| GET:id | `/posts/:id`            | specific post  | Returns the information for an post.         |
-| POST   | `/posts`                | owners         | Create a new post.                           |
-| PUT    | `/posts/:id`            | owners         | Modify an existing post.                     |
-| DELETE | `/posts/:id`            | owners         | Delete an post.                              |
+| Method | Endpoint     | Access Control | Description                          |
+| ------ | ------------ | -------------- | ------------------------------------ |
+| GET    | `/posts`     | all posts      | Returns the information for an post. |
+| GET:id | `/posts/:id` | specific post  | Returns the information for an post. |
+| POST   | `/posts`     | owners         | Create a new post.                   |
+| PUT    | `/posts/:id` | owners         | Modify an existing post.             |
+| DELETE | `/posts/:id` | owners         | Delete an post.                      |
 
 **GET /posts**
 
 Returns an array of objects with top-level details (not including steps):
+
 ```
 {
   [
@@ -67,6 +68,7 @@ Returns an array of objects with top-level details (not including steps):
 **GET /posts/:id**
 
 Returns an object with the following format:
+
 ```
 {
   "id": INTEGER,
@@ -104,6 +106,7 @@ Returns an object with the following format:
 **POST /posts**
 
 Returns the ID of the created post. Expects an object with the following format:
+
 ```
 {
   "title": STRING,
@@ -131,14 +134,18 @@ Returns the ID of the created post. Expects an object with the following format:
 
 #### Tags Routes
 
-| Method | Endpoint                | Access Control      | Description                                        |
-| ------ | ----------------------- | ------------------- | -------------------------------------------------- |
-| GET    | `/tags`                 | all tags            | Returns all available tags.                        |
+| Method | Endpoint    | Access Control | Description                 |
+| ------ | ----------- | -------------- | --------------------------- |
+| GET    | `/tags`     | owners         | Returns all available tags. |
+| POST   | `/tags`     | owners         | Creates a new tag.          |
+| PUT    | `/tags/:id` | owners         | Modify an existing tag.     |
+| DELETE | `/tags/:id` | owners         | Delete a tag.               |
 
 #### Reviews Routes
 
-| Method | Endpoint                | Access Control      | Description                                        |
-| ------ | ----------------------- | ------------------- | -------------------------------------------------- |
+| Method | Endpoint | Access Control | Description |
+| ------ | -------- | -------------- | ----------- |
+
 
 # 2️⃣ Data Model
 
@@ -148,7 +155,7 @@ Returns the ID of the created post. Expects an object with the following format:
 
 ```
 {
-  id: INTEGER, 
+  id: INTEGER,
   username: STRING,
   password: STRING,
   role: STRING,
@@ -266,6 +273,14 @@ Returns the ID of the created post. Expects an object with the following format:
 
 `getPostById(id)` -> Returns a specified post by Id
 
+`getTagsById` -> Returns all tags
+
+`addNew(tag)` -> Adds a new tag
+
+`remove(id)` -> Removes a tag by Id
+
+`update(id, changes)` -> Edits a tag by id
+
 `createPost(post)` -> Creates a new post and returns the Id
 
 `removePost(id)` -> Deletes a post
@@ -278,22 +293,21 @@ In order for the app to function correctly, the user must set up their own envir
 
 A cloudinary account is required to generate a cloud to store the uploaded images.
 Please navigate to https://cloudinary.com/users/register/free and register an account.
-Upon registration you can either receive an automatically generated cloud name or if you choose, you can edit it to be more personalized. After login you will be redirected to the console page where you can find the cloud name, API key, and API secret, that you will need to plug into your .env folder to properly upload images to that cloud.  
-
+Upon registration you can either receive an automatically generated cloud name or if you choose, you can edit it to be more personalized. After login you will be redirected to the console page where you can find the cloud name, API key, and API secret, that you will need to plug into your .env folder to properly upload images to that cloud.
 
 create a .env file that includes the following:
-    
-    *  PORT - what port the server will run on
-    *  HOST - set to "localhost" for "development" and "testing" environments
-    *  DB_DEV - the name of the local PostgreSQL database cluster for development
-    *  DB_TEST - the name of the local PostgreSQL database cluster for testing
-    *  USER - the username set for your local PostgreSQL server
-    *  PASS - the password set for your local PostgreSQL server
-    *  JWT_SECRET - the secret used to encode JSON Web Tokens
-    * CLOUDINARY_CLOUD_NAME - the name given to your personal cloud
-    * CLOUDINARY_API_KEY - the api key provided by cloudinary
-    * CLOUDINARY_API_SECRET - the api secret provided by cloudinary
-    
+
+_ PORT - what port the server will run on
+_ HOST - set to "localhost" for "development" and "testing" environments
+_ DB_DEV - the name of the local PostgreSQL database cluster for development
+_ DB*TEST - the name of the local PostgreSQL database cluster for testing
+* USER - the username set for your local PostgreSQL server
+_ PASS - the password set for your local PostgreSQL server
+_ JWT*SECRET - the secret used to encode JSON Web Tokens
+* CLOUDINARY*CLOUD_NAME - the name given to your personal cloud
+* CLOUDINARY*API_KEY - the api key provided by cloudinary
+* CLOUDINARY_API_SECRET - the api secret provided by cloudinary
+
 ## Contributing
 
 When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
@@ -302,11 +316,12 @@ Please note we have a [code of conduct](./code_of_conduct.md). Please follow it 
 
 ### Issue/Bug Request
 
- **If you are having an issue with the existing project code, please submit a bug report under the following guidelines:**
- - Check first to see if your issue has already been reported.
- - Check to see if the issue has recently been fixed by attempting to reproduce the issue using the latest master branch in the repository.
- - Create a live example of the problem.
- - Submit a detailed bug report including your environment & browser, steps to reproduce the issue, actual and expected outcomes,  where you believe the issue is originating from, and any potential solutions you have considered.
+**If you are having an issue with the existing project code, please submit a bug report under the following guidelines:**
+
+- Check first to see if your issue has already been reported.
+- Check to see if the issue has recently been fixed by attempting to reproduce the issue using the latest master branch in the repository.
+- Create a live example of the problem.
+- Submit a detailed bug report including your environment & browser, steps to reproduce the issue, actual and expected outcomes, where you believe the issue is originating from, and any potential solutions you have considered.
 
 ### Feature Requests
 
