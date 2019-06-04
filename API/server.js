@@ -8,6 +8,7 @@ const server = express();
 const usersRouter = require("./users/user-router.js");
 const postsRouter = require("./posts/posts-router.js");
 const authRouter = require("./auth/auth-router.js");
+const cloudUpload = require("./cloudinary/upload.js");
 const tagsRouter = require("./tags/tags-router.js");
 
 server.use(helmet());
@@ -17,8 +18,9 @@ server.use(cors());
 //Set Routes
 server.use("/users", usersRouter);
 server.use("/posts", postsRouter);
-server.use("/tags", tagsRouter);
 server.use("/auth", authRouter);
+server.use("/", cloudUpload);
+server.use("/tags", tagsRouter);
 
 //Server Test Msg
 server.get("/", (req, res) => {
