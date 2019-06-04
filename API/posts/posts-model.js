@@ -46,7 +46,8 @@ function getPostById(id) {
 };
 
 function createPost(post) {
-    let {steps, ...rest} = post;
+    // Separate out arrays from post object
+    let {tags, steps, ...rest} = post;
     // rest = {...rest, created_by} // Insert user_id from JWT
     let post_id;
     // Use promise for router error handling
@@ -58,9 +59,35 @@ function createPost(post) {
                     .insert(rest)
                     .returning('id')
                     .transacting(trx);
+
+                // Find tags that already exist
+                const existingTags = await db("tags")
+                    .whereIn('name', tags)
+                    .transacting(trx);
+                const existingIDs = existingTags.map(tag => tag.id);
+                const existingNames = existingTags.map(tag => tag.name);
+                // Separate out tags that don't exist yet
+                const newNames = tags.reduce((arr, name) => {
+                    return !existingNames.includes(name)
+                        ? [...arr, {name}]
+                        : arr;
+                }, [])
+                // Create any new tags
+                let newIDs = [];
+                if(newNames.length) {
+                    newIDs = await db("tags")
+                        .insert(newNames, 'id')
+                        .transacting(trx);
+                }
+                // Associate new & existing tags with new post
+                tagIDs = existingIDs.concat(newIDs);
+                tags = tagIDs.map((tag_id, i) => ({post_id, tag_id}))
+                await db("post_tags")
+                    .insert(tags)
+                    .transacting(trx);
+
                 // Create steps w/ ID of the post they're associated with
                 steps = steps.map(step => ({...step, post_id}))
-                console.log(steps)
                 await db("post_steps")
                     .insert(steps)
                     .transacting(trx);
