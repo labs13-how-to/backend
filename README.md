@@ -111,20 +111,19 @@ Returns the ID of the created post. Expects an object with the following format:
   "description": TEXT,
   "difficulty": STRING,
   "duration": STRING,
-  "skills": TEXT,
-  "supplies": TEXT,
-  "created_by": INTEGER,
-  "created_at": TIMESTAMP WITHOUT TIMEZONE,
+  "skills": TEXT, // optional
+  "supplies": TEXT, // optional
+  "created_by": INTEGER, // This will not be necessary once JWTs are being used
   "tags": [
-    STRING
+    STRING // optional
   ],
   "steps": [
     {
       "step_num": INTEGER,
       "title": STRING,
       "instruction": TEXT,
-      "img_url": STRING,
-      "vid_url": STRING
+      "img_url": STRING, // optional
+      "vid_url": STRING // optional
     }
   ]
 }
