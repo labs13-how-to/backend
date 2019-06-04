@@ -167,6 +167,10 @@ To get the server running locally:
 
 ## 2️⃣ Actions
 
+`createUser(user)` -> Creates a user in the users table and returns that user (used for registration)
+
+`getUserByUsername(username)` -> Returns a specified user by username (used for login)
+
 `getAllUsers()` -> Returns all registered users
 
 `getUserById(id)` -> Returns a specified user by Id
@@ -187,6 +191,7 @@ create a .env file that includes the following:
     *  DB_TEST - the name of the local PostgreSQL database cluster for testing
     *  USER - the username set for your local PostgreSQL server
     *  PASS - the password set for your local PostgreSQL server
+    *  JWT_SECRET - the secret used to encode JSON Web Tokens
     
 ## Contributing
 
