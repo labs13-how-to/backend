@@ -11,7 +11,8 @@ exports.up = function(knex, Promise) {
       .notNullable();
 
     users.string('role')
-      .notNullable();
+      .notNullable()
+      .defaultTo('user');
     
     users.timestamp('created_at', { useTz: false })
       .notNullable()

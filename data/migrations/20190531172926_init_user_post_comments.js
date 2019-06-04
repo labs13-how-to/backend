@@ -19,6 +19,7 @@ exports.up = function(knex, Promise) {
       .onUpdate('CASCADE');
 
     user_post_comments.text('comment')
+      .notNullable();
   })
 };
 
