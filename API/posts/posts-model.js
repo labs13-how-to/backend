@@ -25,6 +25,11 @@ function getPostById(id) {
                     .first()
                     .returning('*')
                     .transacting(trx);
+                // Grab the tags for that post
+                tags = await db("post_tags as pt")
+                    .where({ post_id: id })
+                    .join("tags as t", {"pt.tag_id": "t.id"})
+                    .transacting(trx);
                 // Grab the steps for that post
                 steps = await db("post_steps")
                     .where({ post_id: id })
@@ -33,7 +38,7 @@ function getPostById(id) {
             })
             !post
                 ? resolve(null) // If post doesn't exist, return null to trigger 404
-                : resolve({ ...post, steps });
+                : resolve({ ...post, tags, steps });
         } catch(err) {
             reject(err);
         }
