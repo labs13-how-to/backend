@@ -28,9 +28,6 @@ function getById(id) {
 function addNew(reviewPost) {
     return db("user_post_reviews")
         .insert(reviewPost)
-    // .then(id => {
-    //     return getById(id[0])
-    // });
 
 };
 
