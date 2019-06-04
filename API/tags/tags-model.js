@@ -2,7 +2,6 @@ const db = require("../../data/dbConfig.js");
 
 module.exports = {
   getAllTags,
-  getTagsById,
   addNew,
   update,
   remove
@@ -10,12 +9,6 @@ module.exports = {
 
 function getAllTags() {
   return db("tags");
-}
-
-function getTagsById(id) {
-  return db("tags")
-    .where({ id })
-    .first();
 }
 
 function addNew(tag) {
