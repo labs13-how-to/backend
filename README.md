@@ -44,13 +44,12 @@ To get the server running locally:
 
 #### Tags Routes
 
-| Method | Endpoint    | Access Control | Description                  |
-| ------ | ----------- | -------------- | ---------------------------- |
-| GET    | `/tags`     | owners         | Returns all available tags.  |
-| GET    | `/tags/:id` | owners         | Returns specified tag by id. |
-| POST   | `/tags`     | owners         | Creates a new tag.           |
-| PUT    | `/tags/:id` | owners         | Modify an existing tag.      |
-| DELETE | `/tags/:id` | owners         | Delete a tag.                |
+| Method | Endpoint    | Access Control | Description                 |
+| ------ | ----------- | -------------- | --------------------------- |
+| GET    | `/tags`     | owners         | Returns all available tags. |
+| POST   | `/tags`     | owners         | Creates a new tag.          |
+| PUT    | `/tags/:id` | owners         | Modify an existing tag.     |
+| DELETE | `/tags/:id` | owners         | Delete a tag.               |
 
 #### Reviews Routes
 
@@ -181,6 +180,8 @@ To get the server running locally:
 `getPostById(id)` -> Returns a specified post by Id
 
 `getAllTags` -> Returns all tags
+
+`getTagsById` -> Returns all tags
 
 `addNew(tag)` -> Adds a new tag
 
