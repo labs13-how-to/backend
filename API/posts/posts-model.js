@@ -98,10 +98,26 @@ function createPost(post) {
 }
 
 function removePost(id) {
-  return db("posts")
-    .where({ id })
-    .first()
-    .del();
+  return new Promise(async (resolve, reject) => {
+    try {
+        await db.transaction(async trx => {
+            // Delete the specified post's steps
+            await db("post_steps")
+                .where({post_id: id})
+                .del()
+                .transacting(trx);
+            // Delete the specified post itself
+            const deleted = await db("posts")
+                .where({id})
+                .del()
+                .transacting(trx);
+            // Return with the number of posts deleted
+            resolve(deleted);
+        })
+    } catch(err) {
+        reject(err);
+    }
+  })
 }
 
 function updatePost(id, changes) {
