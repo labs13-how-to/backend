@@ -13,10 +13,27 @@ async function genToken(user) {
   return jwt.sign(payload, jwtSecret, opt);
 }
 
+// Simple register
+router.post('/register', (req, res) => {
+  let user = req.body;
+  const hash = bcrypt.hashSync(user.password, 12);
+  user.password = hash;
+  db.createUser(user)
+    .then(async created => {
+      const token = await genToken(created);
+      res.status(201).json({ token });
+    })
+    .catch(err => {
+      res.status(500).json({
+        error: 'Could not create the new user'
+      });
+    });
+})
+
 // Login w/ username and password
 router.post('/login', (req, res) => {
   let { username, password } = req.body;
-  db.login({ username })
+  db.getUserByUsername(username)
     .then(async user => {
       if (user && bcrypt.compareSync(password, user.password)) {
         const token = await genToken(user);
@@ -30,23 +47,6 @@ router.post('/login', (req, res) => {
     .catch(err => {
       res.status(500).json({
         error: 'Could not check credentials against the user database'
-      });
-    });
-})
-
-// Simple register
-router.post('/register', (req, res) => {
-  let user = req.body;
-  const hash = bcrypt.hashSync(user.password, 12);
-  user.password = hash;
-  db.register(user)
-    .then(async created => {
-      const token = await genToken(created);
-      res.status(201).json({ token });
-    })
-    .catch(err => {
-      res.status(500).json({
-        error: 'Could not create the new user'
       });
     });
 })
