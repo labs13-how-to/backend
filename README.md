@@ -42,6 +42,94 @@ To get the server running locally:
 | PUT    | `/posts/:id`            | owners         | Modify an existing post.                     |
 | DELETE | `/posts/:id`            | owners         | Delete an post.                              |
 
+**GET /posts**
+
+Returns an array of objects with top-level details (not including steps):
+```
+{
+  [
+    {
+      "id": INTEGER,
+      "title": STRING,
+      "img_url": STRING,
+      "description": TEXT,
+      "difficulty": STRING,
+      "duration": STRING,
+      "skills": TEXT,
+      "supplies": TEXT,
+      "created_by": INTEGER,
+      "created_at": TIMESTAMP WITHOUT TIMEZONE
+    }
+  ]
+}
+```
+
+**GET /posts/:id**
+
+Returns an object with the following format:
+```
+{
+  "id": INTEGER,
+  "title": STRING,
+  "img_url": STRING,
+  "description": TEXT,
+  "difficulty": STRING,
+  "duration": STRING,
+  "skills": TEXT,
+  "supplies": TEXT,
+  "created_by": INTEGER,
+  "created_at": TIMESTAMP WITHOUT TIMEZONE,
+  "tags": [
+    {
+      "id": INTEGER,
+      "post_id": INTEGER,
+      "tag_id": INTEGER,
+      "name": STRING
+    }
+  ],
+  "steps": [
+    {
+      "id": INTEGER,
+      "post_id": INTEGER,
+      "step_num": INTEGER,
+      "title": STRING,
+      "instruction": TEXT,
+      "img_url": STRING,
+      "vid_url": STRING
+    }
+  ]
+}
+```
+
+**POST /posts**
+
+Returns the ID of the created post. Expects an object with the following format:
+```
+{
+  "title": STRING,
+  "img_url": STRING,
+  "description": TEXT,
+  "difficulty": STRING,
+  "duration": STRING,
+  "skills": TEXT,
+  "supplies": TEXT,
+  "created_by": INTEGER,
+  "created_at": TIMESTAMP WITHOUT TIMEZONE,
+  "tags": [
+    STRING
+  ],
+  "steps": [
+    {
+      "step_num": INTEGER,
+      "title": STRING,
+      "instruction": TEXT,
+      "img_url": STRING,
+      "vid_url": STRING
+    }
+  ]
+}
+```
+
 #### Tags Routes
 
 | Method | Endpoint                | Access Control      | Description                                        |
@@ -178,6 +266,12 @@ To get the server running locally:
 `getAllPosts()` -> Returns all created posts
 
 `getPostById(id)` -> Returns a specified post by Id
+
+`createPost(post)` -> Creates a new post and returns the Id
+
+`removePost(id)` -> Deletes a post
+
+`updatePost(id, changes)` -> Updates a post
 
 ## 3️⃣ Environment Variables
 
