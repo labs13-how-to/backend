@@ -101,9 +101,9 @@ function createPost(post) {
 
 function removePost(id) {
     return db("posts")
-    .where({ id })
-    .first()
-    .del()
+        .where({ id })
+        .first()
+        .del()
 };
 
 function updatePost(id, changes) {
