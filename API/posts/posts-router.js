@@ -18,7 +18,7 @@ router.get("/", (req, res) => {
 });
 
 //Get Specified Post by ID.
-router.get("/:id", (req, res) => {
+router.get("/:id", async (req, res) => {
     const id = req.params.id;
     
     db.getPostById(id)
@@ -41,7 +41,7 @@ router.post("/", (req, res) => {
     if(!newPost.title && !newPost.description && !newPost.difficulty && !newPost.duration) {
         res.status(400).json({ message: "Please provide a title, description, difficulty and duration for this post."})
     } else {
-        db.addNew(newPost)
+        db.createPost(newPost)
         .then(post => {
             res.status(201).json(post)
         })
@@ -55,7 +55,7 @@ router.post("/", (req, res) => {
 router.delete("/:id", (req, res) => {
     const id = req.params.id;
 
-    db.remove(id)
+    db.removePost(id)
     .then(post => {
         if(post) {
             res.status(200).json({ message: "The post has been successfully deleted."})
@@ -73,7 +73,7 @@ router.put("/:id", (req, res) => {
     const id = req.params.id;
     const changes = req.body;
 
-    db.update(id, changes)
+    db.updatePost(id, changes)
     .then(changes => {
         if(changes) {
             res.status(200).json({ message: "This post has been successfully updated."})
