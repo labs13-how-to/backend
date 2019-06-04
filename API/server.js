@@ -8,6 +8,7 @@ const server = express();
 const usersRouter = require('./users/user-router.js');
 const postsRouter = require('./posts/posts-router.js');
 const authRouter = require('./auth/auth-router.js');
+const cloudUpload = require('./cloudinary/upload.js');
 
 server.use(helmet());
 server.use(express.json());
@@ -17,6 +18,7 @@ server.use(cors());
 server.use('/users', usersRouter);
 server.use('/posts', postsRouter);
 server.use('/auth', authRouter);
+server.use('/', cloudUpload);
 
 
 //Server Test Msg
