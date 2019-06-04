@@ -42,6 +42,93 @@ To get the server running locally:
 | PUT    | `/posts/:id`            | owners         | Modify an existing post.                     |
 | DELETE | `/posts/:id`            | owners         | Delete an post.                              |
 
+**GET /posts**
+
+Returns an array of objects with top-level details (not including steps):
+```
+{
+  [
+    {
+      "id": INTEGER,
+      "title": STRING,
+      "img_url": STRING,
+      "description": TEXT,
+      "difficulty": STRING,
+      "duration": STRING,
+      "skills": TEXT,
+      "supplies": TEXT,
+      "created_by": INTEGER,
+      "created_at": TIMESTAMP WITHOUT TIMEZONE
+    }
+  ]
+}
+```
+
+**GET /posts/:id**
+
+Returns an object with the following format:
+```
+{
+  "id": INTEGER,
+  "title": STRING,
+  "img_url": STRING,
+  "description": TEXT,
+  "difficulty": STRING,
+  "duration": STRING,
+  "skills": TEXT,
+  "supplies": TEXT,
+  "created_by": INTEGER,
+  "created_at": TIMESTAMP WITHOUT TIMEZONE,
+  "tags": [
+    {
+      "id": INTEGER,
+      "post_id": INTEGER,
+      "tag_id": INTEGER,
+      "name": STRING
+    }
+  ],
+  "steps": [
+    {
+      "id": INTEGER,
+      "post_id": INTEGER,
+      "step_num": INTEGER,
+      "title": STRING,
+      "instruction": TEXT,
+      "img_url": STRING,
+      "vid_url": STRING
+    }
+  ]
+}
+```
+
+**POST /posts**
+
+Returns the ID of the created post. Expects an object with the following format:
+```
+{
+  "title": STRING,
+  "img_url": STRING,
+  "description": TEXT,
+  "difficulty": STRING,
+  "duration": STRING,
+  "skills": TEXT, // optional
+  "supplies": TEXT, // optional
+  "created_by": INTEGER, // This will not be necessary once JWTs are being used
+  "tags": [
+    STRING // optional
+  ],
+  "steps": [
+    {
+      "step_num": INTEGER,
+      "title": STRING,
+      "instruction": TEXT,
+      "img_url": STRING, // optional
+      "vid_url": STRING // optional
+    }
+  ]
+}
+```
+
 #### Tags Routes
 
 | Method | Endpoint                | Access Control      | Description                                        |
@@ -167,6 +254,10 @@ To get the server running locally:
 
 ## 2️⃣ Actions
 
+`createUser(user)` -> Creates a user in the users table and returns that user (used for registration)
+
+`getUserByUsername(username)` -> Returns a specified user by username (used for login)
+
 `getAllUsers()` -> Returns all registered users
 
 `getUserById(id)` -> Returns a specified user by Id
@@ -174,6 +265,12 @@ To get the server running locally:
 `getAllPosts()` -> Returns all created posts
 
 `getPostById(id)` -> Returns a specified post by Id
+
+`createPost(post)` -> Creates a new post and returns the Id
+
+`removePost(id)` -> Deletes a post
+
+`updatePost(id, changes)` -> Updates a post
 
 ## 3️⃣ Environment Variables
 
@@ -192,6 +289,7 @@ create a .env file that includes the following:
     *  DB_TEST - the name of the local PostgreSQL database cluster for testing
     *  USER - the username set for your local PostgreSQL server
     *  PASS - the password set for your local PostgreSQL server
+    *  JWT_SECRET - the secret used to encode JSON Web Tokens
     * CLOUDINARY_CLOUD_NAME - the name given to your personal cloud
     * CLOUDINARY_API_KEY - the api key provided by cloudinary
     * CLOUDINARY_API_SECRET - the api secret provided by cloudinary
