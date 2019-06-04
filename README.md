@@ -183,6 +183,11 @@ To get the server running locally:
 
 In order for the app to function correctly, the user must set up their own environment variables.
 
+A cloudinary account is required to generate a cloud to store the uploaded images.
+Please navigate to https://cloudinary.com/users/register/free and register an account.
+Upon registration you can either receive an automatically generated cloud name or if you choose, you can edit it to be more personalized. After login you will be redirected to the console page where you can find the cloud name, API key, and API secret, that you will need to plug into your .env folder to properly upload images to that cloud.  
+
+
 create a .env file that includes the following:
     
     *  PORT - what port the server will run on
@@ -192,6 +197,9 @@ create a .env file that includes the following:
     *  USER - the username set for your local PostgreSQL server
     *  PASS - the password set for your local PostgreSQL server
     *  JWT_SECRET - the secret used to encode JSON Web Tokens
+    * CLOUDINARY_CLOUD_NAME - the name given to your personal cloud
+    * CLOUDINARY_API_KEY - the api key provided by cloudinary
+    * CLOUDINARY_API_SECRET - the api secret provided by cloudinary
     
 ## Contributing
 
