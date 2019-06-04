@@ -44,12 +44,13 @@ To get the server running locally:
 
 #### Tags Routes
 
-| Method | Endpoint    | Access Control | Description                 |
-| ------ | ----------- | -------------- | --------------------------- |
-| GET    | `/tags`     | owners         | Returns all available tags. |
-| POST   | `/tags`     | owners         | Creates a new tag.          |
-| PUT    | `/tags/:id` | owners         | Modify an existing tag.     |
-| DELETE | `/tags/:id` | owners         | Delete a tag.               |
+| Method | Endpoint    | Access Control | Description                  |
+| ------ | ----------- | -------------- | ---------------------------- |
+| GET    | `/tags`     | owners         | Returns all available tags.  |
+| GET    | `/tags/:id` | owners         | Returns specified tag by id. |
+| POST   | `/tags`     | owners         | Creates a new tag.           |
+| PUT    | `/tags/:id` | owners         | Modify an existing tag.      |
+| DELETE | `/tags/:id` | owners         | Delete a tag.                |
 
 #### Reviews Routes
 
@@ -196,15 +197,16 @@ Please navigate to https://cloudinary.com/users/register/free and register an ac
 Upon registration you can either receive an automatically generated cloud name or if you choose, you can edit it to be more personalized. After login you will be redirected to the console page where you can find the cloud name, API key, and API secret, that you will need to plug into your .env folder to properly upload images to that cloud.
 
 create a .env file that includes the following:
-  
- _ PORT - what port the server will run on
+
+_ PORT - what port the server will run on
 _ HOST - set to "localhost" for "development" and "testing" environments
 _ DB_DEV - the name of the local PostgreSQL database cluster for development
-_ DB_TEST - the name of the local PostgreSQL database cluster for testing
-_ USER - the username set for your local PostgreSQL server
-_ PASS - the password set for your local PostgreSQL server
-_ CLOUDINARY_CLOUD_NAME - the name given to your personal cloud
-_ CLOUDINARY_API_KEY - the api key provided by cloudinary \* CLOUDINARY_API_SECRET - the api secret provided by cloudinary
+_ DB\*TEST - the name of the local PostgreSQL database cluster for testing
+
+- USER - the username set for your local PostgreSQL server
+  _ PASS - the password set for your local PostgreSQL server
+  _ CLOUDINARY\*CLOUD_NAME - the name given to your personal cloud
+- CLOUDINARY_API_KEY - the api key provided by cloudinary \* CLOUDINARY_API_SECRET - the api secret provided by cloudinary
 
 ## Contributing
 
