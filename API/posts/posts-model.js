@@ -12,10 +12,27 @@ function getAllPosts() {
     return db("posts")
 };
 
-function getPostById(id) {
-    return db("posts")
-    .where({ id })
-    .first()
+async function getPostById(id) {
+    return new Promise(async (resolve, reject) => {
+        let post, steps;
+        try {
+            await db.transaction(async trx => {
+                post = await db("posts")
+                    .where({ id })
+                    .first()
+                    .returning('*')
+                    .transacting(trx);
+                steps = await db("post_steps")
+                    .where({ post_id: id })
+                    .transacting(trx);
+            })
+            !post
+                ? resolve(null)
+                : resolve({ ...post, steps });
+        } catch(err) {
+            reject(err);
+        }
+    })
 };
 
 function addNew(post) {
