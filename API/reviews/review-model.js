@@ -20,7 +20,7 @@ function getByUser(uId) {
 };
 
 function getById(id) {
-    return db("posts")
+    return db("user_post_reviews")
         .where({ id })
         .first()
 };
@@ -32,9 +32,21 @@ function addNew(reviewPost) {
 };
 
 function remove(id) {
-    return null
+    return db("user_post_reviews")
+        .where({ id })
+        .first()
+        .del()
 };
 
 function update(id, changes) {
-    return null
+    return db("user_post_reviews")
+        .where({ id })
+        .update(changes)
+        .then(count => {
+            if (count > 0) {
+                return getById(id)
+            } else {
+                return null;
+            }
+        })
 };
