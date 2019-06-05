@@ -4,8 +4,14 @@ module.exports = {
   getAllPosts,
   getPostById,
   createPost,
+  addPostTag,
+  addPostStep,
   removePost,
-  updatePost
+  removePostTag,
+  removePostStep,
+  updatePost,
+  updatePostTag,
+  updatePostStep
 };
 
 function getAllPosts() {
@@ -45,62 +51,21 @@ function getPostById(id) {
   });
 }
 
-function createPost(post) {
-  // Separate out arrays from post object
-  let { tags, steps, ...rest } = post;
-  // rest = {...rest, created_by} // Insert user_id from JWT
-  let post_id;
-  // Use promise for router error handling
-  return new Promise(async (resolve, reject) => {
-    try {
-      await db.transaction(async trx => {
-        // Create new post and grab its ID
-        [post_id] = await db("posts")
-          .insert(rest)
-          .returning("id")
-          .transacting(trx);
+async function createPost(post) {
+    const [post_id] = await db("posts")
+        .insert(post)
+        .returning("id");
+    return post_id;
+}
 
-        if(!!tags) {
-            // Find tags that already exist
-            const existingTags = await db("tags")
-              .whereIn("name", tags)
-              .transacting(trx);
-            const existingIDs = existingTags.map(tag => tag.id);
-            const existingNames = existingTags.map(tag => tag.name);
-            // Separate out tags that don't exist yet
-            const newNames = tags.reduce((arr, name) => {
-              return !existingNames.includes(name)
-                ? [...arr, { name }]
-                : arr;
-            }, []);
-            // Create any new tags
-            let newIDs = [];
-            if (newNames.length) {
-              newIDs = await db("tags")
-                .insert(newNames, "id")
-                .transacting(trx);
-            }
-            // Associate new & existing tags with new post
-            tagIDs = existingIDs.concat(newIDs);
-            tags = tagIDs.map((tag_id, i) => ({ post_id, tag_id }));
-            await db("post_tags")
-              .insert(tags)
-              .transacting(trx);
-        }
+function addPostTag(post_id, tag_id) {
+    return db("post_tags")
+        .insert({post_id, tag_id});
+}
 
-        if(!!steps) {
-            // Create steps w/ ID of the post they're associated with
-            steps = steps.map(step => ({ ...step, post_id }));
-            await db("post_steps")
-              .insert(steps)
-              .transacting(trx);
-        }
-      });
-      resolve(post_id);
-    } catch (err) {
-      reject(err);
-    }
-  });
+function addPostStep(post_id, step) {
+    return db("post_steps")
+        .insert({...step, post_id});
 }
 
 function removePost(id) {
@@ -131,10 +96,22 @@ function removePost(id) {
   })
 }
 
+function removePostTag(post_id, tag_id) {
+    return db("post_tags")
+        .where({post_id, tag_id})
+        .del();
+}
+
+function removePostStep(id) {
+    return db("post_steps")
+        .where({id})
+        .del();
+}
+
 function updatePost(id, changes) {
     // Separate out arrays from post object
     let { tags, steps, ...rest } = changes;
-    steps = steps.sort((a, b) => a.step_num - b.step_num);
+    
     return new Promise(async (resolve, reject) => {
         try {
             await db.transaction(async trx => {
@@ -145,106 +122,22 @@ function updatePost(id, changes) {
                         .update(rest)
                         .transacting(trx);
                 }
-
-                if(!!tags) {
-                    // Find associated tags
-                    const mappedTags = await db("post_tags as pt")
-                        .where({post_id: id})
-                        .join("tags as t", {"pt.tag_id": "t.id"})
-                        .transacting(trx);
-
-                    // Find tags that shouldn't be associated with the post anymore
-                    const oldTagIDs = mappedTags.reduce((arr, tag) => {
-                        return !tags.includes(tag.name)
-                            ? [...arr, tag.id]
-                            : arr
-                    }, []);
-                    // Delete outdated tag associations
-                    await db("post_tags")
-                        .whereIn("tag_id", oldTagIDs)
-                        .andWhere({post_id: id})
-                        .del()
-                        .transacting(trx);
-                    // Find tags that already exist
-                    const existingTags = await db("tags")
-                        .whereIn("name", tags)
-                        .transacting(trx);
-                    const existingTagIDs = existingTags.map(tag => tag.id);
-                    const existingTagNames = existingTags.map(tag => tag.name);
-                    // Separate out tags that don't exist yet
-                    const newTagNames = tags.reduce((arr, name) => {
-                        return !existingTagNames.includes(name)
-                            ? [...arr, { name }]
-                            : arr;
-                    }, []);
-                    // Create any new tags
-                    let newTagIDs = [];
-                    if (newTagNames.length) {
-                        newTagIDs = await db("tags")
-                        .insert(newTagNames, "id")
-                        .transacting(trx);
-                    }
-                    // Separate out tags that exist but aren't mapped to the post
-                    const mappedTagIDs = mappedTags.map(tag => tag.id);
-                    const unmappedTagIDs = existingTagIDs.filter(id => !mappedTagIDs.includes(id));
-                    // Associate new & unmapped existing tags with the post
-                    tagIDs = unmappedTagIDs.concat(newTagIDs);
-                    tags = tagIDs.reduce((arr, tag_id) => ({ post_id: id, tag_id }), []);
-                    await db("post_tags")
-                        .insert(tags)
-                        .transacting(trx);
-                }
-
-                if(!!steps) {
-                    // Find associated steps
-                    const mappedSteps = await db("post_steps")
-                        .where({post_id: id})
-                        .orderBy("step_num")
-                        .transacting(trx);
-                    console.log('MAPPED',mappedSteps)
-                    console.log('STEPS',steps)
-                    // Determine which steps to update/delete/create
-                    let [deleteSteps, createSteps, updateSteps] = [[],[],[]];
-                    for(let i = 0; i < steps.length || i < mappedSteps.length; i++) {
-                        if(!steps[i] && !!mappedSteps[i]) {
-                            deleteSteps.push(mappedSteps[i].step_num);
-                        } else if(!!steps[i] && !mappedSteps[i]) {
-                            createSteps.push(steps[i]);
-                        } else {
-                            updateSteps.push(steps[i]);
-                        }
-                    }
-                    console.log('DELETE', deleteSteps);
-                    console.log('CREATE', createSteps);
-                    console.log('UPDATE', updateSteps);
-                    if(updateSteps.length) {
-                        const updates = updateSteps.map(step => {
-                            db("post_steps")
-                                .where({post_id: id})
-                                .andWhere({step_num: step.step_num})
-                                .transacting(trx);
-                        })
-                        console.log('UPDATES',updates);
-                    }
-                    // if(createSteps.length) {
-                    //     const stepsCreated = await db("post_steps")
-                    //         .insert(steps)
-                    //         .transacting(trx);
-                    //         console.log(stepsCreated);
-                    // }
-                    if(deleteSteps.length) {
-                        const stepsDeleted = await db("post_steps")
-                            .whereIn("step_num", deleteSteps)
-                            .andWhere({post_id: id})
-                            // .del()
-                            .transacting(trx)
-                        console.log('DELETED', stepsDeleted);
-                    }
-                }
             })
             resolve(id);
         } catch(err) {
             reject(err);
         }
     })
+}
+
+function updatePostTag(post_id, tag_id, changes) {
+    return db("post_tags")
+        .where({post_id, tag_id})
+        .update(changes);
+}
+
+function updatePostStep(id, changes) {
+    return db("post_steps")
+        .where({id})
+        .update(changes);
 }
