@@ -51,6 +51,7 @@ router.post("/", (req, res) => {
     };
 });
 
+// Add a tag to a post
 router.post("/:id/tags", (req, res) => {
     const {id} = req.params;
     const {tag_id} = req.body;
@@ -68,6 +69,7 @@ router.post("/:id/tags", (req, res) => {
     }
 })
 
+// Add a step to a post
 router.post("/:id/steps", (req, res) => {
     const {id} = req.params;
     const step = req.body;
@@ -102,6 +104,7 @@ router.delete("/:id", (req, res) => {
     });
 });
 
+// Remove a tag from a post
 router.delete("/:id/tags/:tag_id", (req, res) => {
     const {id, tag_id} = req.params;
     db.removePostTag(id, tag_id)
@@ -117,6 +120,7 @@ router.delete("/:id/tags/:tag_id", (req, res) => {
         })
 })
 
+// Delete a step
 router.delete("/:id/steps/:step_id", (req, res) => {
     const {step_id} = req.params;
     db.removePostStep(step_id)
@@ -150,6 +154,7 @@ router.put("/:id", (req, res) => {
     })
 });
 
+// Update which tag is mapped to a post
 router.put("/:id/tags/:tag_id", (req, res) => {
     const {id, tag_id} = req.params;
     const changes = req.body;
@@ -166,6 +171,7 @@ router.put("/:id/tags/:tag_id", (req, res) => {
         })
 })
 
+// Update a step on a post
 router.put("/:id/steps/:step_id", (req, res) => {
     const {id, step_id} = req.params;
     const changes = req.body;
