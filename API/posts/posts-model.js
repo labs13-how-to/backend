@@ -112,6 +112,11 @@ function removePost(id) {
                 .where({post_id: id})
                 .del()
                 .transacting(trx);
+            // Delete the specified post's tag associations
+            await db("post_tags")
+                .where({post_id: id})
+                .del()
+                .transacting(trx);
             // Delete the specified post itself
             const deleted = await db("posts")
                 .where({id})
@@ -191,7 +196,50 @@ function updatePost(id, changes) {
                 }
 
                 if(!!steps) {
-                    
+                    // Find associated steps
+                    const mappedSteps = await db("post_steps")
+                        .where({post_id: id})
+                        .orderBy("step_num")
+                        .transacting(trx);
+                    console.log('MAPPED',mappedSteps)
+                    console.log('STEPS',steps)
+                    // Determine which steps to update/delete/create
+                    let [deleteSteps, createSteps, updateSteps] = [[],[],[]];
+                    for(let i = 0; i < steps.length || i < mappedSteps.length; i++) {
+                        if(!steps[i] && !!mappedSteps[i]) {
+                            deleteSteps.push(mappedSteps[i].step_num);
+                        } else if(!!steps[i] && !mappedSteps[i]) {
+                            createSteps.push(steps[i]);
+                        } else {
+                            updateSteps.push(steps[i]);
+                        }
+                    }
+                    console.log('DELETE', deleteSteps);
+                    console.log('CREATE', createSteps);
+                    console.log('UPDATE', updateSteps);
+                    if(updateSteps.length) {
+                        const updates = updateSteps.map(step => {
+                            db("post_steps")
+                                .where({post_id: id})
+                                .andWhere({step_num: step.step_num})
+                                .transacting(trx);
+                        })
+                        console.log('UPDATES',updates);
+                    }
+                    // if(createSteps.length) {
+                    //     const stepsCreated = await db("post_steps")
+                    //         .insert(steps)
+                    //         .transacting(trx);
+                    //         console.log(stepsCreated);
+                    // }
+                    if(deleteSteps.length) {
+                        const stepsDeleted = await db("post_steps")
+                            .whereIn("step_num", deleteSteps)
+                            .andWhere({post_id: id})
+                            // .del()
+                            .transacting(trx)
+                        console.log('DELETED', stepsDeleted);
+                    }
                 }
             })
             resolve(id);
