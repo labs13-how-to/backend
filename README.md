@@ -21,16 +21,22 @@ To get the server running locally:
 
 ## 2️⃣ Endpoints
 
+Utilizing passport we have implemented an authorization process using the google strategy that allows users to be login using an active gmail account.
+
+#### Authentication Routes
+
+| Method | Endpoint       | Access Control | Description                        |
+| ------ | -------------- | -------------- | ---------------------------------- |
+| GET    | `/auth/google` | Account Owner  | Allows a registered user to login. |
+
 #### User Routes
 
-| Method | Endpoint          | Access Control      | Description                          |
-| ------ | ----------------- | ------------------- | ------------------------------------ |
-| GET    | `/users`          | all users           | Returns info for the logged in user. |
-| GET:id | `/users/:id`      | users, supervisors  | Returns info for a single user.      |
-| POST   | `/users/login`    | none                | Allows a registered user to login.   |
-| POST   | `/users/register` | none                | Creates a new registered user.       |
-| PUT    | `/users/:id`      | owners, supervisors | Modify existing user info.           |
-| DELETE | `/users/:id`      | owners, supervisors | Delete an existing user account.     |
+| Method | Endpoint     | Access Control      | Description                          |
+| ------ | ------------ | ------------------- | ------------------------------------ |
+| GET    | `/users`     | all users           | Returns info for the logged in user. |
+| GET:id | `/users/:id` | users, supervisors  | Returns info for a single user.      |
+| PUT    | `/users/:id` | owners, supervisors | Modify existing user info.           |
+| DELETE | `/users/:id` | owners, supervisors | Delete an existing user account.     |
 
 #### Posts Routes
 
@@ -287,6 +293,10 @@ Returns the ID of the created post. Expects an object with the following format:
 
 `updatePost(id, changes)` -> Updates a post
 
+`googleFindUserById(profileId)` -> Returns the users table, selects user where auth_id: profileId(google)
+
+`googleCreateUser(user)` -> Matches the google account to the user object.
+
 ## 3️⃣ Environment Variables
 
 In order for the app to function correctly, the user must set up their own environment variables.
@@ -300,13 +310,14 @@ create a .env file that includes the following:
 _ PORT - what port the server will run on
 _ HOST - set to "localhost" for "development" and "testing" environments
 _ DB_DEV - the name of the local PostgreSQL database cluster for development
-_ DB*TEST - the name of the local PostgreSQL database cluster for testing
-* USER - the username set for your local PostgreSQL server
-_ PASS - the password set for your local PostgreSQL server
-_ JWT*SECRET - the secret used to encode JSON Web Tokens
-* CLOUDINARY*CLOUD_NAME - the name given to your personal cloud
-* CLOUDINARY*API_KEY - the api key provided by cloudinary
-* CLOUDINARY_API_SECRET - the api secret provided by cloudinary
+_ DB\*TEST - the name of the local PostgreSQL database cluster for testing
+
+- USER - the username set for your local PostgreSQL server
+  _ PASS - the password set for your local PostgreSQL server
+  _ JWT\*SECRET - the secret used to encode JSON Web Tokens
+- CLOUDINARY\*CLOUD_NAME - the name given to your personal cloud
+- CLOUDINARY\*API_KEY - the api key provided by cloudinary
+- CLOUDINARY_API_SECRET - the api secret provided by cloudinary
 
 ## Contributing
 
@@ -347,6 +358,6 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 
 ## Documentation
 
-See [Frontend Documentation](https://github.com/labs13-how-to/frontend/blob/master/README.md) for details on the fronend of our project.
+See [Frontend Documentation](https://github.com/labs13-how-to/frontend/blob/master/README.md) for details on the frontend of our project.
 
 See [iOS Documentation](https://github.com/labs13-how-to/ios/blob/master/README.md) for details on the iOS portion of our project.
