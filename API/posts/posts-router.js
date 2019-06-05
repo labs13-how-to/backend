@@ -104,12 +104,32 @@ router.delete("/:id", (req, res) => {
 
 router.delete("/:id/tags/:tag_id", (req, res) => {
     const {id, tag_id} = req.params;
-    // 
+    db.removePostTag(id, tag_id)
+        .then(count => {
+            if(count) {
+                res.status(200).json({ message: "The tag has been successfully removed from the post." })
+            } else {
+                res.status(404).json({ message: "The specified tag does not exist on this post." })
+            }
+        })
+        .catch(err => {
+            res.status(500).json(err.message);
+        })
 })
 
 router.delete("/:id/steps/:step_id", (req, res) => {
-    const {id, step_id} = req.params;
-    // 
+    const {step_id} = req.params;
+    db.removePostStep(step_id)
+        .then(count => {
+            if(count) {
+                res.status(200).json({ message: "The step has been successfully deleted." })
+            } else {
+                res.status(404).json({ message: "The specified step does not exist in our database." })
+            }
+        })
+        .catch(err => {
+            res.status(500).json(err.message);
+        })
 })
 
 //Update a Post.
