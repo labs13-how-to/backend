@@ -3,13 +3,11 @@ const {genUniqueArr} = require("../helpers.js");
 
 const generateSeeds = () => {
   const numOfPosts = 20;
-  const post_idUnique = genUniqueArr(numOfPosts, () => Math.ceil(Math.random() * 20))
   let arr = [];
-  for (let i = 0; i < numOfPosts; i++) {
-    const post_id = post_idUnique[i];
+  for (let i = 1; i < numOfPosts + 1; i++) {
     for (let j = 1; j < 4; j++) {
       arr.push({
-        post_id,
+        post_id: i,
         step_num: j,
         title: faker.lorem.sentence(),
         instruction: faker.lorem.paragraph(),
