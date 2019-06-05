@@ -72,7 +72,7 @@ router.post("/:id/steps", (req, res) => {
     const {id} = req.params;
     const step = req.body;
 
-    if(!step.step_num || !step.title || !status.instruction) {
+    if(!step.step_num || !step.title || !step.instruction) {
         res.status(400).json({ message: "Please provide the step_num, title, and instruction for the step you wish to add to this post."})
     } else {
         db.addPostStep(id, step)
