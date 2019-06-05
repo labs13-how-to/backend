@@ -1,6 +1,8 @@
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
+const passport = require("passport");
+require("./auth/passport.js")(passport);
 
 const server = express();
 
@@ -16,6 +18,10 @@ const reviewRouter = require('./reviews/review-router.js');
 server.use(helmet());
 server.use(express.json());
 server.use(cors());
+
+//Initialize Passport
+server.use(passport.initialize());
+server.use(passport.session());
 
 //Set Routes
 server.use("/users", usersRouter);

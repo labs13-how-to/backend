@@ -4,8 +4,14 @@ module.exports = {
   getAllPosts,
   getPostById,
   createPost,
+  addPostTag,
+  addPostStep,
   removePost,
-  updatePost
+  removePostTag,
+  removePostStep,
+  updatePost,
+  updatePostTag,
+  updatePostStep
 };
 
 function getAllPosts() {
@@ -27,8 +33,9 @@ function getPostById(id) {
           .transacting(trx);
         // Grab the tags for that post
         tags = await db("post_tags as pt")
+          .select("pt.*", "t.name")
           .where({ post_id: id })
-          .join("tags as t", { "pt.tag_id": "t.id" })
+          .join("tags as t", { "t.id": "pt.tag_id" })
           .transacting(trx);
         // Grab the steps for that post
         steps = await db("post_steps")
@@ -45,74 +52,80 @@ function getPostById(id) {
   });
 }
 
-function createPost(post) {
-  // Separate out arrays from post object
-  let { tags, steps, ...rest } = post;
-  // rest = {...rest, created_by} // Insert user_id from JWT
-  let post_id;
-  // Use promise for router error handling
-  return new Promise(async (resolve, reject) => {
-    try {
-      await db.transaction(async trx => {
-        // Create new post and grab its ID
-        [post_id] = await db("posts")
-          .insert(rest)
-          .returning("id")
-          .transacting(trx);
+async function createPost(post) {
+    const [post_id] = await db("posts")
+        .insert(post)
+        .returning("id");
+    return post_id;
+}
 
-        // Find tags that already exist
-        const existingTags = await db("tags")
-          .whereIn("name", tags)
-          .transacting(trx);
-        const existingIDs = existingTags.map(tag => tag.id);
-        const existingNames = existingTags.map(tag => tag.name);
-        // Separate out tags that don't exist yet
-        const newNames = tags.reduce((arr, name) => {
-          return !existingNames.includes(name) ? [...arr, { name }] : arr;
-        }, []);
-        // Create any new tags
-        let newIDs = [];
-        if (newNames.length) {
-          newIDs = await db("tags")
-            .insert(newNames, "id")
-            .transacting(trx);
-        }
-        // Associate new & existing tags with new post
-        tagIDs = existingIDs.concat(newIDs);
-        tags = tagIDs.map((tag_id, i) => ({ post_id, tag_id }));
-        await db("post_tags")
-          .insert(tags)
-          .transacting(trx);
+function addPostTag(post_id, tag_id) {
+    return db("post_tags")
+        .insert({post_id, tag_id})
+        .returning("id");
+}
 
-        // Create steps w/ ID of the post they're associated with
-        steps = steps.map(step => ({ ...step, post_id }));
-        await db("post_steps")
-          .insert(steps)
-          .transacting(trx);
-      });
-      resolve(post_id);
-    } catch (err) {
-      reject(err);
-    }
-  });
+function addPostStep(post_id, step) {
+    return db("post_steps")
+        .insert({...step, post_id})
+        .returning("id");
 }
 
 function removePost(id) {
-  return db("posts")
-    .where({ id })
-    .first()
-    .del();
+  return new Promise(async (resolve, reject) => {
+    try {
+        await db.transaction(async trx => {
+            // Delete the specified post's steps
+            await db("post_steps")
+                .where({post_id: id})
+                .del()
+                .transacting(trx);
+            // Delete the specified post's tag associations
+            await db("post_tags")
+                .where({post_id: id})
+                .del()
+                .transacting(trx);
+            // Delete the specified post itself
+            const deleted = await db("posts")
+                .where({id})
+                .del()
+                .transacting(trx);
+            // Return with the number of posts deleted
+            resolve(deleted);
+        })
+    } catch(err) {
+        reject(err);
+    }
+  })
+}
+
+function removePostTag(post_id, tag_id) {
+    return db("post_tags")
+        .where({post_id, tag_id})
+        .del();
+}
+
+function removePostStep(id) {
+    return db("post_steps")
+        .where({id})
+        .del();
 }
 
 function updatePost(id, changes) {
-  return db("posts")
-    .where({ id })
-    .update(changes)
-    .then(count => {
-      if (count > 0) {
-        return getPostById(id);
-      } else {
-        return null;
-      }
-    });
+    return db("posts")
+        .where({id})
+        .update(changes)
+        .returning("id");
+}
+
+function updatePostTag(post_id, tag_id, changes) {
+    return db("post_tags")
+        .where({post_id, tag_id})
+        .update(changes);
+}
+
+function updatePostStep(id, changes) {
+    return db("post_steps")
+        .where({id})
+        .update(changes);
 }

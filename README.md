@@ -21,26 +21,38 @@ To get the server running locally:
 
 ## 2️⃣ Endpoints
 
+Utilizing passport we have implemented an authorization process using the google strategy that allows users to be login using an active gmail account.
+
+#### Authentication Routes
+
+| Method | Endpoint       | Access Control | Description                        |
+| ------ | -------------- | -------------- | ---------------------------------- |
+| GET    | `/auth/google` | Account Owner  | Allows a registered user to login. |
+
 #### User Routes
 
-| Method | Endpoint          | Access Control      | Description                          |
-| ------ | ----------------- | ------------------- | ------------------------------------ |
-| GET    | `/users`          | all users           | Returns info for the logged in user. |
-| GET:id | `/users/:id`      | users, supervisors  | Returns info for a single user.      |
-| POST   | `/users/login`    | none                | Allows a registered user to login.   |
-| POST   | `/users/register` | none                | Creates a new registered user.       |
-| PUT    | `/users/:id`      | owners, supervisors | Modify existing user info.           |
-| DELETE | `/users/:id`      | owners, supervisors | Delete an existing user account.     |
+| Method | Endpoint     | Access Control      | Description                          |
+| ------ | ------------ | ------------------- | ------------------------------------ |
+| GET    | `/users`     | all users           | Returns info for the logged in user. |
+| GET:id | `/users/:id` | users, supervisors  | Returns info for a single user.      |
+| PUT    | `/users/:id` | owners, supervisors | Modify existing user info.           |
+| DELETE | `/users/:id` | owners, supervisors | Delete an existing user account.     |
 
 #### Posts Routes
 
-| Method | Endpoint     | Access Control | Description                          |
-| ------ | ------------ | -------------- | ------------------------------------ |
-| GET    | `/posts`     | all posts      | Returns the information for an post. |
-| GET:id | `/posts/:id` | specific post  | Returns the information for an post. |
-| POST   | `/posts`     | owners         | Create a new post.                   |
-| PUT    | `/posts/:id` | owners         | Modify an existing post.             |
-| DELETE | `/posts/:id` | owners         | Delete an post.                      |
+| Method | Endpoint                    | Access Control   | Description                 |
+| ------ | --------------------------- | ---------------- | --------------------------- |
+| GET    | `/posts`                    | all users        | Returns all posts.          |
+| GET    | `/posts/:id`                | all users        | Returns the specified post. |
+| POST   | `/posts`                    | registered users | Create a new post.          |
+| POST   | `/posts/:id/tags`           | post creator     | Adds a tag to a post.       |
+| POST   | `/posts/:id/steps`          | post creator     | Adds a step to a post.      |
+| PUT    | `/posts/:id`                | post creator     | Modify an existing post.    |
+| PUT    | `/posts/:id/tags/:tag_id`   | post creator     | Edit a tag on a post.       |
+| PUT    | `/posts/:id/steps/:step_id` | post creator     | Edit a step on a post.      |
+| DELETE | `/posts/:id`                | post creator     | Delete a post.              |
+| DELETE | `/posts/:id/tags/:tag_id`   | post creator     | Remove a tag from a post.   |
+| DELETE | `/posts/:id/steps/:step_id` | post creator     | Remove a step from a post.  |
 
 **GET /posts**
 
@@ -117,20 +129,85 @@ Returns the ID of the created post. Expects an object with the following format:
   "skills": TEXT, // optional
   "supplies": TEXT, // optional
   "created_by": INTEGER, // This will not be necessary once JWTs are being used
-  "tags": [
-    STRING // optional
-  ],
-  "steps": [
-    {
-      "step_num": INTEGER,
-      "title": STRING,
-      "instruction": TEXT,
-      "img_url": STRING, // optional
-      "vid_url": STRING // optional
-    }
-  ]
 }
 ```
+
+**POST /posts/:id/tags**
+
+Returns the ID of the entry in the `post_tags` table that maps the tag to the post. Expects an object with the following format:
+
+```
+{
+  "post_id": INTEGER,
+  "tag_id": INTEGER
+}
+```
+
+**POST /posts/:id/steps**
+
+Returns the ID of the step in the `post_steps` table. Expects an object with the following format:
+
+```
+{
+  "step_num": INTEGER,
+  "title": STRING,
+  "instruction": TEXT,
+  "img_url": STRING, // optional
+  "vid_url": STRING // optional
+},
+```
+
+**PUT /posts/:id**
+
+Returns with a success message. Expects an object with any of the following data:
+
+```
+{
+  "title": STRING,
+  "img_url": STRING,
+  "description": TEXT,
+  "difficulty": STRING,
+  "duration": STRING,
+  "skills": TEXT,
+  "supplies": TEXT
+}
+```
+
+**PUT /posts/:id/tags/:tag_id**
+
+Returns with the ID of the post. Expects an object with the following format:
+
+```
+{
+  "tag_id": INTEGER
+}
+```
+
+**PUT /posts/:id/steps/:step_id**
+
+Returns with a success message. Expects an object with any of the following data:
+
+```
+{
+  "step_num": INTEGER,
+  "title": STRING,
+  "instruction": TEXT,
+  "img_url": STRING,
+  "vid_url": STRING
+}
+```
+
+**DELETE /posts/:id**
+
+Returns with a success message. All needed data is pulled from the route.
+
+**DELETE /posts/:id/tags/:tag_id**
+
+Returns with a success message. All needed data is pulled from the route.
+
+**DELETE /posts/:id/steps/:step_id**
+
+Returns with a success message. All needed data is pulled from the route.
 
 #### Tags Routes
 
@@ -143,9 +220,14 @@ Returns the ID of the created post. Expects an object with the following format:
 
 #### Reviews Routes
 
-| Method | Endpoint | Access Control | Description |
-| ------ | -------- | -------------- | ----------- |
-
+| Method | Endpoint                   | Access Control  | Description                             |
+| ------ | -------------------------- | --------------- | --------------------------------------- |
+| GET    | `/posts/:id/reviews`       | all users       | Returns all reviews on a specific post. |
+| GET    | `/posts/reviews/:rId`      | all users       | Returns a specific review               |
+| GET    | `/posts/user/:uId/reviews` | all users       | Returns all reviews by a specific user. |
+| POST   | `/posts/:id/reviews`       | registered user | Creates a new review.                   |
+| PUT    | `/posts/reviews/:rId`      | review creator  | Modifies an existing review.            |
+| DELETE | `/posts/reviews/:rId`      | review creator  | Deletes a review.                       |
 
 # 2️⃣ Data Model
 
@@ -287,6 +369,10 @@ Returns the ID of the created post. Expects an object with the following format:
 
 `updatePost(id, changes)` -> Updates a post
 
+`googleFindUserById(profileId)` -> Returns the users table, selects user where auth_id: profileId(google)
+
+`googleCreateUser(user)` -> Matches the google account to the user object.
+
 ## 3️⃣ Environment Variables
 
 In order for the app to function correctly, the user must set up their own environment variables.
@@ -300,13 +386,14 @@ create a .env file that includes the following:
 _ PORT - what port the server will run on
 _ HOST - set to "localhost" for "development" and "testing" environments
 _ DB_DEV - the name of the local PostgreSQL database cluster for development
-_ DB*TEST - the name of the local PostgreSQL database cluster for testing
-* USER - the username set for your local PostgreSQL server
-_ PASS - the password set for your local PostgreSQL server
-_ JWT*SECRET - the secret used to encode JSON Web Tokens
-* CLOUDINARY*CLOUD_NAME - the name given to your personal cloud
-* CLOUDINARY*API_KEY - the api key provided by cloudinary
-* CLOUDINARY_API_SECRET - the api secret provided by cloudinary
+_ DB\*TEST - the name of the local PostgreSQL database cluster for testing
+
+- USER - the username set for your local PostgreSQL server
+  _ PASS - the password set for your local PostgreSQL server
+  _ JWT\*SECRET - the secret used to encode JSON Web Tokens
+- CLOUDINARY\*CLOUD_NAME - the name given to your personal cloud
+- CLOUDINARY\*API_KEY - the api key provided by cloudinary
+- CLOUDINARY_API_SECRET - the api secret provided by cloudinary
 
 ## Contributing
 
@@ -347,6 +434,6 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 
 ## Documentation
 
-See [Frontend Documentation](https://github.com/labs13-how-to/frontend/blob/master/README.md) for details on the fronend of our project.
+See [Frontend Documentation](https://github.com/labs13-how-to/frontend/blob/master/README.md) for details on the frontend of our project.
 
 See [iOS Documentation](https://github.com/labs13-how-to/ios/blob/master/README.md) for details on the iOS portion of our project.
