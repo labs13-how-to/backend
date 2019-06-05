@@ -220,15 +220,14 @@ Returns with a success message. All needed data is pulled from the route.
 
 #### Reviews Routes
 
-| Method | Endpoint                   | Access Control  | Description |
-| ------ | -------------------------- | --------------- | ----------- |
+| Method | Endpoint                   | Access Control  | Description                             |
+| ------ | -------------------------- | --------------- | --------------------------------------- |
 | GET    | `/posts/:id/reviews`       | all users       | Returns all reviews on a specific post. |
-| GET    | `/posts/reviews/:rId`      | all users       | Returns a specific review             |
+| GET    | `/posts/reviews/:rId`      | all users       | Returns a specific review               |
 | GET    | `/posts/user/:uId/reviews` | all users       | Returns all reviews by a specific user. |
-| POST   | `/posts/:id/reviews`       | registered user | Creates a new review.                     |
+| POST   | `/posts/:id/reviews`       | registered user | Creates a new review.                   |
 | PUT    | `/posts/reviews/:rId`      | review creator  | Modifies an existing review.            |
-| DELETE | `/posts/reviews/:rId`      | review creator  | Deletes a review.                     |
-
+| DELETE | `/posts/reviews/:rId`      | review creator  | Deletes a review.                       |
 
 # 2️⃣ Data Model
 
