@@ -152,12 +152,34 @@ router.put("/:id", (req, res) => {
 
 router.put("/:id/tags/:tag_id", (req, res) => {
     const {id, tag_id} = req.params;
-    // 
+    const changes = req.body;
+    db.updatePostTag(id, tag_id, changes)
+        .then(changes => {
+            if(changes) {
+                res.status(200).json({ message: "This tag has been successfully updated on this post." })
+            } else {
+                res.status(404).json({ message: "The specified tag does not exist on this post." })
+            }
+        })
+        .catch(err => {
+            res.status(500).json(err.message);
+        })
 })
 
 router.put("/:id/steps/:step_id", (req, res) => {
     const {id, step_id} = req.params;
-    // 
+    const changes = req.body;
+    db.updatePostStep(step_id, changes)
+        .then(changes => {
+            if(changes) {
+                res.status(200).json({ message: "This step has been successfully updated." })
+            } else {
+                res.status(404).json({ message: "The specified step does not exist in our database." })
+            }
+        })
+        .catch(err => {
+            res.status(500).json(err.message);
+        })
 })
 
 module.exports = router;
