@@ -123,20 +123,85 @@ Returns the ID of the created post. Expects an object with the following format:
   "skills": TEXT, // optional
   "supplies": TEXT, // optional
   "created_by": INTEGER, // This will not be necessary once JWTs are being used
-  "tags": [
-    STRING // optional
-  ],
-  "steps": [
-    {
-      "step_num": INTEGER,
-      "title": STRING,
-      "instruction": TEXT,
-      "img_url": STRING, // optional
-      "vid_url": STRING // optional
-    }
-  ]
 }
 ```
+
+**POST /posts/:id/tags**
+
+Returns the ID of the entry in the `post_tags` table that maps the tag to the post. Expects an object with the following format:
+
+```
+{
+  "post_id": INTEGER,
+  "tag_id": INTEGER
+}
+```
+
+**POST /posts/:id/steps**
+
+Returns the ID of the step in the `post_steps` table. Expects an object with the following format:
+
+```
+{
+  "step_num": INTEGER,
+  "title": STRING,
+  "instruction": TEXT,
+  "img_url": STRING, // optional
+  "vid_url": STRING // optional
+},
+```
+
+**PUT /posts/:id**
+
+Returns with a success message. Expects an object with any of the following data:
+
+```
+{
+  "title": STRING,
+  "img_url": STRING,
+  "description": TEXT,
+  "difficulty": STRING,
+  "duration": STRING,
+  "skills": TEXT,
+  "supplies": TEXT
+}
+```
+
+**PUT /posts/:id/tags/:tag_id**
+
+Returns with a success message. Expects an object with the following format:
+
+```
+{
+  "tag_id": INTEGER
+}
+```
+
+**PUT /posts/:id/steps/:step_id**
+
+Returns with a success message. Expects an object with any of the following data:
+
+```
+{
+  "step_num": INTEGER,
+  "title": STRING,
+  "instruction": TEXT,
+  "img_url": STRING,
+  "vid_url": STRING
+}
+```
+
+**DELETE /posts/:id**
+
+Returns with a success message. All needed data is pulled from the route.
+
+**DELETE /posts/:id/tags/:tag_id**
+
+Returns with a success message. All needed data is pulled from the route.
+
+**DELETE /posts/:id/steps/:step_id**
+
+Returns with a success message. All needed data is pulled from the route.
 
 #### Tags Routes
 
