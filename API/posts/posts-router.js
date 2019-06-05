@@ -51,9 +51,19 @@ router.post("/", (req, res) => {
     };
 });
 
+router.post("/:id/tags", (req, res) => {
+    const {id} = req.params;
+    // 
+})
+
+router.post("/:id/steps", (req, res) => {
+    const {id} = req.params;
+    // 
+})
+
 //Delete A Post.
 router.delete("/:id", (req, res) => {
-    const id = req.params.id;
+    const {id} = req.params;
 
     db.removePost(id)
     .then(post => {
@@ -68,9 +78,19 @@ router.delete("/:id", (req, res) => {
     });
 });
 
+router.delete("/:id/tags/:tag_id", (req, res) => {
+    const {id, tag_id} = req.params;
+    // 
+})
+
+router.delete("/:id/steps/:step_id", (req, res) => {
+    const {id, step_id} = req.params;
+    // 
+})
+
 //Update a Post.
 router.put("/:id", (req, res) => {
-    const id = req.params.id;
+    const {id} = req.params;
     const changes = req.body;
 
     db.updatePost(id, changes)
@@ -85,5 +105,15 @@ router.put("/:id", (req, res) => {
         res.status(500).json(err.message)
     })
 });
+
+router.put("/:id/tags/:tag_id", (req, res) => {
+    const {id, tag_id} = req.params;
+    // 
+})
+
+router.put("/:id/steps/:step_id", (req, res) => {
+    const {id, step_id} = req.params;
+    // 
+})
 
 module.exports = router;
