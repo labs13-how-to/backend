@@ -68,7 +68,9 @@ function createPost(post) {
         const existingNames = existingTags.map(tag => tag.name);
         // Separate out tags that don't exist yet
         const newNames = tags.reduce((arr, name) => {
-          return !existingNames.includes(name) ? [...arr, { name }] : arr;
+          return !existingNames.includes(name)
+            ? [...arr, { name }]
+            : arr;
         }, []);
         // Create any new tags
         let newIDs = [];
@@ -121,14 +123,86 @@ function removePost(id) {
 }
 
 function updatePost(id, changes) {
-  return db("posts")
-    .where({ id })
-    .update(changes)
-    .then(count => {
-      if (count > 0) {
-        return getPostById(id);
-      } else {
-        return null;
-      }
-    });
+    // Separate out arrays from post object
+    let { tags, steps, ...rest } = changes;
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.transaction(async trx => {
+                if(rest.length) {
+                    // Update top-level post data
+                    await db("posts")
+                        .where({id})
+                        .update(rest)
+                        .transacting(trx);
+                }
+
+                if(!!tags) {
+                    // Find associated tags
+                    const mappedTags = await db("post_tags as pt")
+                        .where({post_id: id})
+                        .join("tags as t", {"pt.tag_id": "t.id"})
+                        .transacting(trx);
+
+                    // Find tags that shouldn't be associated with the post anymore
+                    const oldIDs = mappedTags.reduce((arr, tag) => {
+                        return !tags.includes(tag.name)
+                            ? [...arr, tag.id]
+                            : arr
+                    }, []);
+                    // Delete outdated tag associations
+                    await db("post_tags")
+                        .whereIn("tag_id", oldIDs)
+                        .andWhere({post_id: id})
+                        .del()
+                        .transacting(trx);
+                    // Find tags that already exist
+                    const existingTags = await db("tags")
+                        .whereIn("name", tags)
+                        .transacting(trx);
+                    const existingIDs = existingTags.map(tag => tag.id);
+                    const existingNames = existingTags.map(tag => tag.name);
+                    // Separate out tags that don't exist yet
+                    const newNames = tags.reduce((arr, name) => {
+                        return !existingNames.includes(name)
+                            ? [...arr, { name }]
+                            : arr;
+                    }, []);
+                    console.log(newNames)
+                    // Create any new tags
+                    let newIDs = [];
+                    if (newNames.length) {
+                        newIDs = await db("tags")
+                        .insert(newNames, "id")
+                        .transacting(trx);
+                    }
+                    // Separate out tags that exist but aren't mapped to the post
+                    const mappedIDs = mappedTags.map(tag => tag.id);
+                    const unmappedIDs = existingIDs.filter(id => !mappedIDs.includes(id));
+                    // Associate new & unmapped existing tags with the post
+                    tagIDs = unmappedIDs.concat(newIDs);
+                    tags = tagIDs.reduce((arr, tag_id) => ({ post_id: id, tag_id }), []);
+                    await db("post_tags")
+                        .insert(tags)
+                        .transacting(trx);
+                }
+
+                if(!!steps) {
+                    
+                }
+            })
+            resolve(id);
+        } catch(err) {
+            reject(err);
+        }
+    })
+//   return db("posts")
+//     .where({ id })
+//     .update(changes)
+//     .then(count => {
+//       if (count > 0) {
+//         return getPostById(id);
+//       } else {
+//         return null;
+//       }
+//     });
 }
