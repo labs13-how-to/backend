@@ -60,12 +60,14 @@ async function createPost(post) {
 
 function addPostTag(post_id, tag_id) {
     return db("post_tags")
-        .insert({post_id, tag_id});
+        .insert({post_id, tag_id})
+        .returning("id");
 }
 
 function addPostStep(post_id, step) {
     return db("post_steps")
-        .insert({...step, post_id});
+        .insert({...step, post_id})
+        .returning("id");
 }
 
 function removePost(id) {
