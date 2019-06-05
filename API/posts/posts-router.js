@@ -38,7 +38,7 @@ router.get("/:id", async (req, res) => {
 router.post("/", (req, res) => {
     const newPost = req.body;
 
-    if(!newPost.title && !newPost.description && !newPost.difficulty && !newPost.duration) {
+    if(!newPost.title || !newPost.description || !newPost.difficulty || !newPost.duration) {
         res.status(400).json({ message: "Please provide a title, description, difficulty and duration for this post."})
     } else {
         db.createPost(newPost)
@@ -53,12 +53,36 @@ router.post("/", (req, res) => {
 
 router.post("/:id/tags", (req, res) => {
     const {id} = req.params;
-    // 
+    const {tag_id} = req.body;
+
+    if(!tag_id) {
+        res.status(400).json({ message: "Please provide the tag_id for the tag you wish to add to this post."})
+    } else {
+        db.addPostTag(id, tag_id)
+            .then(post_tag => {
+                res.status(201).json(post_tag);
+            })
+            .catch(err => {
+                res.status(500).json(err.message);
+            })
+    }
 })
 
 router.post("/:id/steps", (req, res) => {
     const {id} = req.params;
-    // 
+    const step = req.body;
+
+    if(!step.step_num || !step.title || !status.instruction) {
+        res.status(400).json({ message: "Please provide the step_num, title, and instruction for the step you wish to add to this post."})
+    } else {
+        db.addPostStep(id, step)
+            .then(post_step => {
+                res.status(201).json(post_step);
+            })
+            .catch(err => {
+                res.status(500).json(err.message);
+            })
+    }
 })
 
 //Delete A Post.
