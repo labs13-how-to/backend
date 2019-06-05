@@ -1,5 +1,4 @@
 const faker = require("faker");
-const {genUniqueArr} = require("../helpers.js");
 
 const generateSeeds = () => {
   const numOfPosts = 20;
