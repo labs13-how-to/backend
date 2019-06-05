@@ -34,13 +34,19 @@ To get the server running locally:
 
 #### Posts Routes
 
-| Method | Endpoint     | Access Control | Description                          |
-| ------ | ------------ | -------------- | ------------------------------------ |
-| GET    | `/posts`     | all posts      | Returns the information for an post. |
-| GET:id | `/posts/:id` | specific post  | Returns the information for an post. |
-| POST   | `/posts`     | owners         | Create a new post.                   |
-| PUT    | `/posts/:id` | owners         | Modify an existing post.             |
-| DELETE | `/posts/:id` | owners         | Delete an post.                      |
+| Method | Endpoint                    | Access Control   | Description                 |
+| ------ | --------------------------- | ---------------- | --------------------------- |
+| GET    | `/posts`                    | all users        | Returns all posts.          |
+| GET    | `/posts/:id`                | all users        | Returns the specified post. |
+| POST   | `/posts`                    | registered users | Create a new post.          |
+| POST   | `/posts/:id/tags`           | post creator     | Adds a tag to a post.       |
+| POST   | `/posts/:id/steps`          | post creator     | Adds a step to a post.      |
+| PUT    | `/posts/:id`                | post creator     | Modify an existing post.    |
+| PUT    | `/posts/:id/tags/:tag_id`   | post creator     | Edit a tag on a post.       |
+| PUT    | `/posts/:id/steps/:step_id` | post creator     | Edit a step on a post.      |
+| DELETE | `/posts/:id`                | post creator     | Delete a post.              |
+| DELETE | `/posts/:id/tags/:tag_id`   | post creator     | Remove a tag from a post.   |
+| DELETE | `/posts/:id/steps/:step_id` | post creator     | Remove a step from a post.  |
 
 **GET /posts**
 
