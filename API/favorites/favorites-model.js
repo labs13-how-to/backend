@@ -4,8 +4,8 @@ module.exports = {
     getByUser,
     getByPost,
     getById,
+    getId,
     addNew,
-    update,
     remove
 };
 
@@ -17,6 +17,11 @@ function getByUser(id) {
 function getByPost(id) {
     return db("user_favorites")
         .where({ post_id: id })
+}
+function getId(id) {
+    return db("user_favorites")
+        .where({ id })
+        .first()
 }
 
 function getById(userId, postId) {
@@ -46,8 +51,4 @@ function remove(id) {
         .where({ id })
         .first()
         .del();
-}
-
-function update(id, changes) {
-    return null
 }
