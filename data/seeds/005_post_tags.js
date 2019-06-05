@@ -1,5 +1,3 @@
-const faker = require("faker");
-
 const generateSeeds = () => {
   const numOfReviews = 20;
   let arr = [];
