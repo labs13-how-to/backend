@@ -40,13 +40,19 @@ Utilizing passport we have implemented an authorization process using the google
 
 #### Posts Routes
 
-| Method | Endpoint     | Access Control | Description                          |
-| ------ | ------------ | -------------- | ------------------------------------ |
-| GET    | `/posts`     | all posts      | Returns the information for an post. |
-| GET:id | `/posts/:id` | specific post  | Returns the information for an post. |
-| POST   | `/posts`     | owners         | Create a new post.                   |
-| PUT    | `/posts/:id` | owners         | Modify an existing post.             |
-| DELETE | `/posts/:id` | owners         | Delete an post.                      |
+| Method | Endpoint                    | Access Control   | Description                 |
+| ------ | --------------------------- | ---------------- | --------------------------- |
+| GET    | `/posts`                    | all users        | Returns all posts.          |
+| GET    | `/posts/:id`                | all users        | Returns the specified post. |
+| POST   | `/posts`                    | registered users | Create a new post.          |
+| POST   | `/posts/:id/tags`           | post creator     | Adds a tag to a post.       |
+| POST   | `/posts/:id/steps`          | post creator     | Adds a step to a post.      |
+| PUT    | `/posts/:id`                | post creator     | Modify an existing post.    |
+| PUT    | `/posts/:id/tags/:tag_id`   | post creator     | Edit a tag on a post.       |
+| PUT    | `/posts/:id/steps/:step_id` | post creator     | Edit a step on a post.      |
+| DELETE | `/posts/:id`                | post creator     | Delete a post.              |
+| DELETE | `/posts/:id/tags/:tag_id`   | post creator     | Remove a tag from a post.   |
+| DELETE | `/posts/:id/steps/:step_id` | post creator     | Remove a step from a post.  |
 
 **GET /posts**
 
@@ -123,20 +129,85 @@ Returns the ID of the created post. Expects an object with the following format:
   "skills": TEXT, // optional
   "supplies": TEXT, // optional
   "created_by": INTEGER, // This will not be necessary once JWTs are being used
-  "tags": [
-    STRING // optional
-  ],
-  "steps": [
-    {
-      "step_num": INTEGER,
-      "title": STRING,
-      "instruction": TEXT,
-      "img_url": STRING, // optional
-      "vid_url": STRING // optional
-    }
-  ]
 }
 ```
+
+**POST /posts/:id/tags**
+
+Returns the ID of the entry in the `post_tags` table that maps the tag to the post. Expects an object with the following format:
+
+```
+{
+  "post_id": INTEGER,
+  "tag_id": INTEGER
+}
+```
+
+**POST /posts/:id/steps**
+
+Returns the ID of the step in the `post_steps` table. Expects an object with the following format:
+
+```
+{
+  "step_num": INTEGER,
+  "title": STRING,
+  "instruction": TEXT,
+  "img_url": STRING, // optional
+  "vid_url": STRING // optional
+},
+```
+
+**PUT /posts/:id**
+
+Returns with a success message. Expects an object with any of the following data:
+
+```
+{
+  "title": STRING,
+  "img_url": STRING,
+  "description": TEXT,
+  "difficulty": STRING,
+  "duration": STRING,
+  "skills": TEXT,
+  "supplies": TEXT
+}
+```
+
+**PUT /posts/:id/tags/:tag_id**
+
+Returns with the ID of the post. Expects an object with the following format:
+
+```
+{
+  "tag_id": INTEGER
+}
+```
+
+**PUT /posts/:id/steps/:step_id**
+
+Returns with a success message. Expects an object with any of the following data:
+
+```
+{
+  "step_num": INTEGER,
+  "title": STRING,
+  "instruction": TEXT,
+  "img_url": STRING,
+  "vid_url": STRING
+}
+```
+
+**DELETE /posts/:id**
+
+Returns with a success message. All needed data is pulled from the route.
+
+**DELETE /posts/:id/tags/:tag_id**
+
+Returns with a success message. All needed data is pulled from the route.
+
+**DELETE /posts/:id/steps/:step_id**
+
+Returns with a success message. All needed data is pulled from the route.
 
 #### Tags Routes
 
@@ -149,8 +220,14 @@ Returns the ID of the created post. Expects an object with the following format:
 
 #### Reviews Routes
 
-| Method | Endpoint | Access Control | Description |
-| ------ | -------- | -------------- | ----------- |
+| Method | Endpoint                   | Access Control  | Description |
+| ------ | -------------------------- | --------------- | ----------- |
+| GET    | `/posts/:id/reviews`       | all users       | Returns all reviews on a specific post. |
+| GET    | `/posts/reviews/:rId`      | all users       | Returns a specific review             |
+| GET    | `/posts/user/:uId/reviews` | all users       | Returns all reviews by a specific user. |
+| POST   | `/posts/:id/reviews`       | registered user | Creates a new review.                     |
+| PUT    | `/posts/reviews/:rId`      | review creator  | Modifies an existing review.            |
+| DELETE | `/posts/reviews/:rId`      | review creator  | Deletes a review.                     |
 
 
 # 2️⃣ Data Model
