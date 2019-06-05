@@ -114,7 +114,8 @@ function removePostStep(id) {
 function updatePost(id, changes) {
     return db("posts")
         .where({id})
-        .update(changes);
+        .update(changes)
+        .returning("id");
 }
 
 function updatePostTag(post_id, tag_id, changes) {

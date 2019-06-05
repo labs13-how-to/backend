@@ -169,7 +169,7 @@ Returns with a success message. Expects an object with any of the following data
 
 **PUT /posts/:id/tags/:tag_id**
 
-Returns with a success message. Expects an object with the following format:
+Returns with the ID of the post. Expects an object with the following format:
 
 ```
 {
