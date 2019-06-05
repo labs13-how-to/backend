@@ -60,37 +60,41 @@ function createPost(post) {
           .returning("id")
           .transacting(trx);
 
-        // Find tags that already exist
-        const existingTags = await db("tags")
-          .whereIn("name", tags)
-          .transacting(trx);
-        const existingIDs = existingTags.map(tag => tag.id);
-        const existingNames = existingTags.map(tag => tag.name);
-        // Separate out tags that don't exist yet
-        const newNames = tags.reduce((arr, name) => {
-          return !existingNames.includes(name)
-            ? [...arr, { name }]
-            : arr;
-        }, []);
-        // Create any new tags
-        let newIDs = [];
-        if (newNames.length) {
-          newIDs = await db("tags")
-            .insert(newNames, "id")
-            .transacting(trx);
+        if(!!tags) {
+            // Find tags that already exist
+            const existingTags = await db("tags")
+              .whereIn("name", tags)
+              .transacting(trx);
+            const existingIDs = existingTags.map(tag => tag.id);
+            const existingNames = existingTags.map(tag => tag.name);
+            // Separate out tags that don't exist yet
+            const newNames = tags.reduce((arr, name) => {
+              return !existingNames.includes(name)
+                ? [...arr, { name }]
+                : arr;
+            }, []);
+            // Create any new tags
+            let newIDs = [];
+            if (newNames.length) {
+              newIDs = await db("tags")
+                .insert(newNames, "id")
+                .transacting(trx);
+            }
+            // Associate new & existing tags with new post
+            tagIDs = existingIDs.concat(newIDs);
+            tags = tagIDs.map((tag_id, i) => ({ post_id, tag_id }));
+            await db("post_tags")
+              .insert(tags)
+              .transacting(trx);
         }
-        // Associate new & existing tags with new post
-        tagIDs = existingIDs.concat(newIDs);
-        tags = tagIDs.map((tag_id, i) => ({ post_id, tag_id }));
-        await db("post_tags")
-          .insert(tags)
-          .transacting(trx);
 
-        // Create steps w/ ID of the post they're associated with
-        steps = steps.map(step => ({ ...step, post_id }));
-        await db("post_steps")
-          .insert(steps)
-          .transacting(trx);
+        if(!!steps) {
+            // Create steps w/ ID of the post they're associated with
+            steps = steps.map(step => ({ ...step, post_id }));
+            await db("post_steps")
+              .insert(steps)
+              .transacting(trx);
+        }
       });
       resolve(post_id);
     } catch (err) {
@@ -125,6 +129,7 @@ function removePost(id) {
 function updatePost(id, changes) {
     // Separate out arrays from post object
     let { tags, steps, ...rest } = changes;
+    steps = steps.sort((a, b) => a.step_num - b.step_num);
     return new Promise(async (resolve, reject) => {
         try {
             await db.transaction(async trx => {
@@ -144,14 +149,14 @@ function updatePost(id, changes) {
                         .transacting(trx);
 
                     // Find tags that shouldn't be associated with the post anymore
-                    const oldIDs = mappedTags.reduce((arr, tag) => {
+                    const oldTagIDs = mappedTags.reduce((arr, tag) => {
                         return !tags.includes(tag.name)
                             ? [...arr, tag.id]
                             : arr
                     }, []);
                     // Delete outdated tag associations
                     await db("post_tags")
-                        .whereIn("tag_id", oldIDs)
+                        .whereIn("tag_id", oldTagIDs)
                         .andWhere({post_id: id})
                         .del()
                         .transacting(trx);
@@ -159,27 +164,26 @@ function updatePost(id, changes) {
                     const existingTags = await db("tags")
                         .whereIn("name", tags)
                         .transacting(trx);
-                    const existingIDs = existingTags.map(tag => tag.id);
-                    const existingNames = existingTags.map(tag => tag.name);
+                    const existingTagIDs = existingTags.map(tag => tag.id);
+                    const existingTagNames = existingTags.map(tag => tag.name);
                     // Separate out tags that don't exist yet
-                    const newNames = tags.reduce((arr, name) => {
-                        return !existingNames.includes(name)
+                    const newTagNames = tags.reduce((arr, name) => {
+                        return !existingTagNames.includes(name)
                             ? [...arr, { name }]
                             : arr;
                     }, []);
-                    console.log(newNames)
                     // Create any new tags
-                    let newIDs = [];
-                    if (newNames.length) {
-                        newIDs = await db("tags")
-                        .insert(newNames, "id")
+                    let newTagIDs = [];
+                    if (newTagNames.length) {
+                        newTagIDs = await db("tags")
+                        .insert(newTagNames, "id")
                         .transacting(trx);
                     }
                     // Separate out tags that exist but aren't mapped to the post
-                    const mappedIDs = mappedTags.map(tag => tag.id);
-                    const unmappedIDs = existingIDs.filter(id => !mappedIDs.includes(id));
+                    const mappedTagIDs = mappedTags.map(tag => tag.id);
+                    const unmappedTagIDs = existingTagIDs.filter(id => !mappedTagIDs.includes(id));
                     // Associate new & unmapped existing tags with the post
-                    tagIDs = unmappedIDs.concat(newIDs);
+                    tagIDs = unmappedTagIDs.concat(newTagIDs);
                     tags = tagIDs.reduce((arr, tag_id) => ({ post_id: id, tag_id }), []);
                     await db("post_tags")
                         .insert(tags)
@@ -195,14 +199,4 @@ function updatePost(id, changes) {
             reject(err);
         }
     })
-//   return db("posts")
-//     .where({ id })
-//     .update(changes)
-//     .then(count => {
-//       if (count > 0) {
-//         return getPostById(id);
-//       } else {
-//         return null;
-//       }
-//     });
 }
