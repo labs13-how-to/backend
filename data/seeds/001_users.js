@@ -4,12 +4,13 @@ const {genUniqueArr} = require("../helpers.js");
 const generateSeeds = () => {
   const numOfUsers = 500;
   const usernameUnique = genUniqueArr(numOfUsers, faker.internet.userName);
+  const auth_idUnique = genUniqueArr(numOfUsers, faker.random.uuid)
   let arr = [];
   for (let i = 0; i < numOfUsers; i++) {
     arr.push({
       //.findName() creates a full name (first and last)
       username: usernameUnique[i],
-      password: faker.lorem.word(),
+      auth_id: auth_idUnique[i],
       role: "user"
     });
   }
