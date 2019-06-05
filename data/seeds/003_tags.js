@@ -15,7 +15,7 @@ const generateSeeds = () => {
 
 exports.seed = async function(knex, Promise) {
   const tags = await generateSeeds();
-  return knex.raw("TRUNCATE TABLE users RESTART IDENTITY CASCADE")
+  return knex.raw("TRUNCATE TABLE tags RESTART IDENTITY CASCADE")
     .then(function () {
       return knex('tags').insert(tags);
     });
