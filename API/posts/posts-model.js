@@ -33,8 +33,9 @@ function getPostById(id) {
           .transacting(trx);
         // Grab the tags for that post
         tags = await db("post_tags as pt")
+          .select("pt.*", "t.name")
           .where({ post_id: id })
-          .join("tags as t", { "pt.tag_id": "t.id" })
+          .join("tags as t", { "t.id": "pt.tag_id" })
           .transacting(trx);
         // Grab the steps for that post
         steps = await db("post_steps")
