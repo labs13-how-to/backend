@@ -109,25 +109,9 @@ function removePostStep(id) {
 }
 
 function updatePost(id, changes) {
-    // Separate out arrays from post object
-    let { tags, steps, ...rest } = changes;
-    
-    return new Promise(async (resolve, reject) => {
-        try {
-            await db.transaction(async trx => {
-                if(rest.length) {
-                    // Update top-level post data
-                    await db("posts")
-                        .where({id})
-                        .update(rest)
-                        .transacting(trx);
-                }
-            })
-            resolve(id);
-        } catch(err) {
-            reject(err);
-        }
-    })
+    return db("posts")
+        .where({id})
+        .update(rest);
 }
 
 function updatePostTag(post_id, tag_id, changes) {
