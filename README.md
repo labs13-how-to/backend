@@ -74,7 +74,7 @@ Utilizing passport we have implemented an authorization process using the google
 | GET    | `/favorites/:id`                         | users | Returns info for a single favorite. |
 | GET    | `/favorites/users/:userId/posts/:postId` | users | Returns info for a single user.     |
 | POST   | `/favorites/users/:userId`               | users | Create a new favorite.              |
-| DELETE | `/favorites/:id`                         | users | Delete an existing ufavorite.       |
+| DELETE | `/favorites/:id`                         | users | Delete an existing favorite.       |
 
 #### Comments Routes
 
@@ -84,8 +84,9 @@ Utilizing passport we have implemented an authorization process using the google
 | GET    | `/posts/:postId/comments`               | users | Returns comments of a post.        |
 | GET    | `/comments/:id`                         | users | Returns info for a single comment. |
 | GET    | `/comments/users/:userId/posts/:postId` | users | Returns info for a single comment. |
-| POST   | `/comments/users/:userId`               | users | Create a new comment.              |
-| DELETE | `/comments/:id`                         | users | Delete an existing ucomment.       |
+| POST   |  `/comments/users/:userId`              | users | Create a new comment.              |
+| PUT    | `/comments:id`                          | users | Modify an existing comment.         |
+| DELETE | `/comments/:id`                         | users | Delete an existing comment.       |
 
 **GET /posts**
 
