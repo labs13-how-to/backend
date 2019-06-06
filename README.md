@@ -56,23 +56,36 @@ Utilizing passport we have implemented an authorization process using the google
 
 #### Reviews Routes
 
-| Method | Endpoint     | Access Control      | Description                          |
-| ------ | ------------ | ------------------- | ------------------------------------ |
-| GET    | `/users`     | all users           | Returns info for the logged in user. |
-| GET    | `/users/:id` | users, supervisors  | Returns info for a single user.      |
-| PUT    | `/users/:id` | owners, supervisors | Modify existing user info.           |
-| DELETE | `/users/:id` | owners, supervisors | Delete an existing user account.     |
+| Method | Endpoint                   | AC    | Description                          |
+| ------ | -------------------------- | ----- | ------------------------------------ |
+| GET    | `/posts/:id/reviews`       | users | Returns info for a posts reviews.    |
+| GET    | `/posts/reviews/:rId`      | users | Returns info for a single review.    |
+| GET    | `/posts/user/:uId/reviews` | users | Returns info for users reviews.      |
+| POST   | `/posts/:id/reviews`       | users | Create a new review.                 |
+| PUT    | `/posts/reviews/:id`       | users | Modify an existing review.           |
+| DELETE | `/posts/reviews/:id`       | users | Delete an existing review.           |
 
 #### Favorites Routes
 
-| Method | Endpoint                                 | Access Control      | Description           |
-| ------ | ---------------------------------------- | ------------------- | --------------------- |
+| Method | Endpoint                                 | AC    | Description                         |
+| ------ | ---------------------------------------- | ----- | ----------------------------------- |
 | GET    | `/favorites/users/:userId`               | users | Returns favorites of a user.        |
 | GET    | `/posts/:postId/favorites`               | users | Returns favorites of a post.        |
 | GET    | `/favorites/:id`                         | users | Returns info for a single favorite. |
 | GET    | `/favorites/users/:userId/posts/:postId` | users | Returns info for a single user.     |
 | POST   | `/favorites/users/:userId`               | users | Create a new favorite.              |
 | DELETE | `/favorites/:id`                         | users | Delete an existing ufavorite.       |
+
+#### Comments Routes
+
+| Method | Endpoint                                | AC    | Description                        |
+| ------ | --------------------------------------- | ----- | ---------------------------------- |
+| GET    | `/comments/users/:userId`               | users | Returns comments of a user.        |
+| GET    | `/posts/:postId/comments`               | users | Returns comments of a post.        |
+| GET    | `/comments/:id`                         | users | Returns info for a single comment. |
+| GET    | `/comments/users/:userId/posts/:postId` | users | Returns info for a single comment. |
+| POST   | `/comments/users/:userId`               | users | Create a new comment.              |
+| DELETE | `/comments/:id`                         | users | Delete an existing ucomment.       |
 
 **GET /posts**
 
