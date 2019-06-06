@@ -79,10 +79,10 @@ function add(req, res) {
     const { postId } = req.params;
     const info = { user_id: req.body.user_id, post_id: postId };
     db.addNew(info)
-        .then((res) => {
-            return res.status(200).json(res)
+        .then((result) => {
+            res.status(200).json(result)
         })
-        .catch(err => { res.status(405).json({ err }) });
+        .catch(err => res.status(405).json({ err, msg: err.message }));
 }
 
 function remove(req, res) {
