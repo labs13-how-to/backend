@@ -239,7 +239,7 @@ Returns with a success message. All needed data is pulled from the route.
 {
   id: INTEGER,
   username: STRING,
-  password: STRING,
+  auth_id: STRING, // this is where we are saving the id response from google
   role: STRING,
   created_at: TIMESTAMP WITHOUT TIMEZONES
 }
