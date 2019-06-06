@@ -6,6 +6,7 @@ const generatePosts = async () => {
 
   for (let i = 0; i <= 4; i++) {
     for (let x = 1; x <= 4; x++) {
+      // Force protocol to https
       let img_url = faker.image.image();
       if(img_url.startsWith("http:")) {
         img_url = img_url.replace("http:", "https:")
