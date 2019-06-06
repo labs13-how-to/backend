@@ -12,6 +12,7 @@ const postsRouter = require("./posts/posts-router.js");
 const authRouter = require("./auth/auth-router.js");
 const cloudUpload = require("./cloudinary/upload.js");
 const tagsRouter = require("./tags/tags-router.js");
+const favoriteRouter = require('./favorites/favorites-router.js');
 const reviewRouter = require('./reviews/review-router.js');
 
 server.use(helmet());
@@ -26,7 +27,7 @@ server.use(passport.session());
 server.use("/users", usersRouter);
 server.use('/posts', postsRouter, reviewRouter);
 server.use("/auth", authRouter);
-server.use("/", cloudUpload);
+server.use("/", cloudUpload, favoriteRouter);
 server.use("/tags", tagsRouter);
 
 //Server Test Msg
