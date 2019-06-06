@@ -21,9 +21,9 @@ To get the server running locally:
 
 ## 2️⃣ Endpoints
 
-Utilizing passport we have implemented an authorization process using the google strategy that allows users to be login using an active gmail account.
-
 #### Authentication Route
+
+Utilizing passport we have implemented an authorization process using the google strategy that allows users to be login using an active gmail account.
 
 | Method | Endpoint       | Access Control | Description                        |
 | ------ | -------------- | -------------- | ---------------------------------- |
@@ -54,15 +54,6 @@ Utilizing passport we have implemented an authorization process using the google
 | DELETE | `/posts/:id/tags/:tag_id`   | post creator     | Remove a tag from a post.   |
 | DELETE | `/posts/:id/steps/:step_id` | post creator     | Remove a step from a post.  |
 
-#### Reviews Routes
-
-| Method | Endpoint     | Access Control      | Description                          |
-| ------ | ------------ | ------------------- | ------------------------------------ |
-| GET    | `/users`     | all users           | Returns info for the logged in user. |
-| GET    | `/users/:id` | users, supervisors  | Returns info for a single user.      |
-| PUT    | `/users/:id` | owners, supervisors | Modify existing user info.           |
-| DELETE | `/users/:id` | owners, supervisors | Delete an existing user account.     |
-
 #### Favorites Routes
 
 | Method | Endpoint                                 | Access Control      | Description           |
@@ -72,7 +63,33 @@ Utilizing passport we have implemented an authorization process using the google
 | GET    | `/favorites/:id`                         | users | Returns info for a single favorite. |
 | GET    | `/favorites/users/:userId/posts/:postId` | users | Returns info for a single user.     |
 | POST   | `/favorites/users/:userId`               | users | Create a new favorite.              |
-| DELETE | `/favorites/:id`                         | users | Delete an existing ufavorite.       |
+| DELETE | `/favorites/:id`                         | users | Delete an existing favorite.        |
+
+#### Tags Routes
+
+| Method | Endpoint    | Access Control | Description                 |
+| ------ | ----------- | -------------- | --------------------------- |
+| GET    | `/tags`     | owners         | Returns all available tags. |
+| POST   | `/tags`     | owners         | Creates a new tag.          |
+| PUT    | `/tags/:id` | owners         | Modify an existing tag.     |
+| DELETE | `/tags/:id` | owners         | Delete a tag.               |
+
+#### Reviews Routes
+
+| Method | Endpoint                   | Access Control  | Description                             |
+| ------ | -------------------------- | --------------- | --------------------------------------- |
+| GET    | `/posts/:id/reviews`       | all users       | Returns all reviews on a specific post. |
+| GET    | `/posts/reviews/:rId`      | all users       | Returns a specific review               |
+| GET    | `/posts/user/:uId/reviews` | all users       | Returns all reviews by a specific user. |
+| POST   | `/posts/:id/reviews`       | registered user | Creates a new review.                   |
+| PUT    | `/posts/reviews/:rId`      | review creator  | Modifies an existing review.            |
+| DELETE | `/posts/reviews/:rId`      | review creator  | Deletes a review.                       |
+
+#### Image Upload Route
+
+| Method | Endpoint                   | Access Control  | Description                             |
+| ------ | -------------------------- | --------------- | --------------------------------------- |
+| POST   | `/upload`                  | owners          | Upload/store an image on cloudinary     |
 
 **GET /posts**
 
@@ -229,25 +246,6 @@ Returns with a success message. All needed data is pulled from the route.
 
 Returns with a success message. All needed data is pulled from the route.
 
-#### Tags Routes
-
-| Method | Endpoint    | Access Control | Description                 |
-| ------ | ----------- | -------------- | --------------------------- |
-| GET    | `/tags`     | owners         | Returns all available tags. |
-| POST   | `/tags`     | owners         | Creates a new tag.          |
-| PUT    | `/tags/:id` | owners         | Modify an existing tag.     |
-| DELETE | `/tags/:id` | owners         | Delete a tag.               |
-
-#### Reviews Routes
-
-| Method | Endpoint                   | Access Control  | Description                             |
-| ------ | -------------------------- | --------------- | --------------------------------------- |
-| GET    | `/posts/:id/reviews`       | all users       | Returns all reviews on a specific post. |
-| GET    | `/posts/reviews/:rId`      | all users       | Returns a specific review               |
-| GET    | `/posts/user/:uId/reviews` | all users       | Returns all reviews by a specific user. |
-| POST   | `/posts/:id/reviews`       | registered user | Creates a new review.                   |
-| PUT    | `/posts/reviews/:rId`      | review creator  | Modifies an existing review.            |
-| DELETE | `/posts/reviews/:rId`      | review creator  | Deletes a review.                       |
 
 # 2️⃣ Data Model
 
