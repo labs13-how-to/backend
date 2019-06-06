@@ -21,11 +21,10 @@ module.exports = function(passport) {
   passport.use(
     new GoogleStrategy(
       {
-        //process.env.GOOGLE_CLIENT_ID,
-        clientID:
-          "697232372364-3uq74ah0kjh2vkuqboip82n69afknfe2.apps.googleusercontent.com",
-        clientSecret: "y7e_l3caVjJRgqs-WGIGrbDM", //process.env.GOOGLE_CLIENT_SECRET
-        callbackURL: "http://localhost:5000/auth/google/callback"
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        // callbackURL: 'http://localhost:5000/auth/google/callback'
+        callbackURL: `${process.env.BE_URL}/auth/google/callback`
       },
       async (accessToken, refreshToken, profile, done) => {
         console.log("accessToken", accessToken);
