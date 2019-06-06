@@ -6,10 +6,15 @@ const generatePosts = async () => {
 
   for (let i = 0; i <= 4; i++) {
     for (let x = 1; x <= 4; x++) {
+      let img_url = faker.image.imageURL();
+      if(img_url.startsWith("http:")) {
+        img_url = img_url.replace("http:", "https:")
+      }
+      
       arr.push({
         created_by: x,
         title: faker.lorem.word(),
-        img_url: faker.image.imageUrl(),
+        img_url,
         description: faker.lorem.sentences(),
         difficulty: difficulty[Math.floor(Math.random() * difficulty.length)],
         duration: faker.random.number(),

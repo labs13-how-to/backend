@@ -5,12 +5,17 @@ const generateSeeds = () => {
   let arr = [];
   for (let i = 1; i < numOfPosts + 1; i++) {
     for (let j = 1; j < 4; j++) {
+      let img_url = faker.image.imageURL();
+      if(img_url.startsWith("http:")) {
+        img_url = img_url.replace("http:", "https:")
+      }
+
       arr.push({
         post_id: i,
         step_num: j,
         title: faker.lorem.sentence(),
         instruction: faker.lorem.paragraph(),
-        img_url: faker.image.image()
+        img_url
       });
     }
   }
