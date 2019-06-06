@@ -5,7 +5,7 @@ const generateSeeds = () => {
   let arr = [];
   for (let i = 1; i < numOfPosts + 1; i++) {
     for (let j = 1; j < 4; j++) {
-      let img_url = faker.image.imageURL();
+      let img_url = faker.image.image();
       if(img_url.startsWith("http:")) {
         img_url = img_url.replace("http:", "https:")
       }
