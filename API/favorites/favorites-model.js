@@ -39,7 +39,7 @@ function addNew(favorite) {
                     return getByUser(user_id);
                 });
         } else {
-            return 'that favorite already exists';
+            return { message: 'that favorite already exists' };
         }
     })
 
