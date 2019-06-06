@@ -6,7 +6,8 @@ module.exports = {
     getById,
     getId,
     addNew,
-    remove
+    remove,
+    update
 };
 
 function getByUser(id) {
@@ -38,5 +39,15 @@ function addNew(favorite) {
 }
 
 function remove(id) {
-    return null
+    return db("user_post_comments")
+        .where({ id })
+        .first()
+        .del();
+}
+
+function update(id, changes) {
+    return db("user_post_comments")
+        .where({ id })
+        .update(changes)
+        .returning("id");
 }
