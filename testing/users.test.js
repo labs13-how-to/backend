@@ -52,6 +52,26 @@ describe("User Functions", () => {
             const expected = await request(server).get("/users/500/posts")
             expect(expected.status).toBe(404)
         });
-      });
+    });
+
+    describe("PUT /users/:id", () => {
+        it("returns a status code 200, successful update", async () => {
+            const expected = await request(server).put("/users/1")
+            .send({ username: "pattttttt" })
+            expect(expected.status).toBe(200)
+        });
+      
+        it("returns a status code 500, bad request", async () => {
+            const expected = await request(server).put("/users/1")
+            .send({ username: "adawg", password: "dizzle" })
+            expect(expected.status).toBe(500)
+        });
+      
+        it("returns a status code 404, invalid update", async () => {
+            const expected = await request(server).put("/users/999")
+            .send({ username: "matt" })
+            expect(expected.status).toBe(404)
+        });
+    });
 
 });
