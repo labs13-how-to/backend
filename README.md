@@ -23,7 +23,7 @@ To get the server running locally:
 
 Utilizing passport we have implemented an authorization process using the google strategy that allows users to be login using an active gmail account.
 
-#### Authentication Routes
+#### Authentication Route
 
 | Method | Endpoint       | Access Control | Description                        |
 | ------ | -------------- | -------------- | ---------------------------------- |
@@ -383,17 +383,19 @@ Upon registration you can either receive an automatically generated cloud name o
 
 create a .env file that includes the following:
 
-_ PORT - what port the server will run on
-_ HOST - set to "localhost" for "development" and "testing" environments
-_ DB_DEV - the name of the local PostgreSQL database cluster for development
-_ DB\*TEST - the name of the local PostgreSQL database cluster for testing
-
+- PORT - what port the server will run on
+- HOST - set to "localhost" for "development" and "testing" environments
+- DB_DEV - the name of the local PostgreSQL database cluster for development
+- DB_TEST - the name of the local PostgreSQL database cluster for testing
 - USER - the username set for your local PostgreSQL server
-  _ PASS - the password set for your local PostgreSQL server
-  _ JWT\*SECRET - the secret used to encode JSON Web Tokens
-- CLOUDINARY\*CLOUD_NAME - the name given to your personal cloud
-- CLOUDINARY\*API_KEY - the api key provided by cloudinary
+- PASS - the password set for your local PostgreSQL server
+- JWT_SECRET - the secret used to encode JSON Web Tokens
+- CLOUDINARY_CLOUD_NAME - the name given to your personal cloud
+- CLOUDINARY_API_KEY - the api key provided by cloudinary
 - CLOUDINARY_API_SECRET - the api secret provided by cloudinary
+- GOOGLE_CLIENT_ID - The client ID provided by google after successfully registering the project on the google API console
+- GOOGLE_CLIENT_SECRET - The client secret provided by google after successfully registering the project on the google API console
+- BE_URL - The localhost url or the deployed application url: http://localhost:5000 or https://lambda-how-to.herokuapp.com
 
 ## Contributing
 
