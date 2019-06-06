@@ -3,6 +3,7 @@ const db = require("../../data/dbConfig.js");
 module.exports = {
   getAllPosts,
   getPostById,
+  getStepsByPostId,
   createPost,
   addPostTag,
   addPostStep,
@@ -50,6 +51,11 @@ function getPostById(id) {
       reject(err);
     }
   });
+}
+
+function getStepsByPostId(post_id) {
+  return db("post_steps")
+    .where({post_id});
 }
 
 async function createPost(post) {
