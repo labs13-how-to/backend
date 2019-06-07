@@ -4,6 +4,7 @@ const server = require("../API/server.js");
 
 describe("User Functions", () => {
     beforeAll(async () => {
+        jest.setTimeout(10000);
         await db.seed.run();
       });
 
