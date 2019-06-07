@@ -3,9 +3,9 @@ const db = require("../data/dbConfig.js");
 const server = require("../API/server.js");
 
 describe("User Functions", () => {
-    // beforeEach(async () => {
-    //     await db("users").truncate();
-    //   });
+    beforeAll(async () => {
+        await db.seed.run();
+      });
 
     describe("GET /users", () => {
         it("returns a status code 200, successful request", () => {
@@ -77,10 +77,10 @@ describe("User Functions", () => {
         });
     });
 
-    //This test only works once and then needs the pre-test function to reset the db in order to run
-    //Issue using truncate beforeEach due to foreign key constraint
     describe("DELETE /users/:id", () => {
         it("returns a status code 200, successful delete", async () => {
+
+
             const expected = await request(server).delete("/users/450")
             expect(expected.status).toBe(200)
         });
