@@ -33,12 +33,13 @@ Utilizing passport we have implemented an authorization process using the google
 
 #### User Routes
 
-| Method | Endpoint     | Access Control      | Description                          |
-| ------ | ------------ | ------------------- | ------------------------------------ |
-| GET    | `/users`     | all users           | Returns info for the logged in user. |
-| GET    | `/users/:id` | users, supervisors  | Returns info for a single user.      |
-| PUT    | `/users/:id` | owners, supervisors | Modify existing user info.           |
-| DELETE | `/users/:id` | owners, supervisors | Delete an existing user account.     |
+| Method | Endpoint          | Access Control      | Description                          |
+| ------ | ----------------- | ------------------- | ------------------------------------ |
+| GET    | `/users`          | all users           | Returns info for the logged in user. |
+| GET    | `/users/:id`      | users, supervisors  | Returns info for a single user.      |
+| GET    | `/users/:id/post` | users, supervisors  | Returns all posts for a single user. |
+| PUT    | `/users/:id`      | owners, supervisors | Modify existing user info.           |
+| DELETE | `/users/:id`      | owners, supervisors | Delete an existing user account.     |
 
 #### Posts Routes
 
@@ -88,17 +89,6 @@ Utilizing passport we have implemented an authorization process using the google
 | PUT    | `/tags/:id` | owners         | Modify an existing tag.     |
 | DELETE | `/tags/:id` | owners         | Delete a tag.               |
 
-#### Reviews Routes
-
-| Method | Endpoint                   | Access Control  | Description                             |
-| ------ | -------------------------- | --------------- | --------------------------------------- |
-| GET    | `/posts/:id/reviews`       | all users       | Returns all reviews on a specific post. |
-| GET    | `/posts/reviews/:rId`      | all users       | Returns a specific review               |
-| GET    | `/posts/user/:uId/reviews` | all users       | Returns all reviews by a specific user. |
-| POST   | `/posts/:id/reviews`       | registered user | Creates a new review.                   |
-| PUT    | `/posts/reviews/:rId`      | review creator  | Modifies an existing review.            |
-| DELETE | `/posts/reviews/:rId`      | review creator  | Deletes a review.                       |
-
 #### Image Upload Route
 
 | Method | Endpoint  | Access Control | Description                         |
@@ -113,7 +103,7 @@ Utilizing passport we have implemented an authorization process using the google
 | GET    | `/posts/:postId/comments`               | users | Returns comments of a post.        |
 | GET    | `/comments/:id`                         | users | Returns info for a single comment. |
 | GET    | `/comments/users/:userId/posts/:postId` | users | Returns info for a single comment. |
-| POST   |  `/comments/users/:userId`              | users | Create a new comment.              |
+| POST   | `/comments/users/:userId`               | users | Create a new comment.              |
 | PUT    | `/comments:id`                          | users | Modify an existing comment.        |
 | DELETE | `/comments/:id`                         | users | Delete an existing comment.        |
 
