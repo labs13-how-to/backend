@@ -108,6 +108,21 @@ function removePost(id) {
                 .where({post_id: id})
                 .del()
                 .transacting(trx);
+            // Delete the favorites for the specified post
+            await db("user_favorites")
+                .where({post_id: id})
+                .del()
+                .transacting(trx);
+            // Delete the reviews for the specified post
+            await db("user_post_reviews")
+                .where({post_id: id})
+                .del()
+                .transacting(trx);
+            // Delete the comments for the specified post
+            await db("user_post_comments")
+                .where({post_id: id})
+                .del()
+                .transacting(trx);
             // Delete the specified post itself
             const deleted = await db("posts")
                 .where({id})
