@@ -18,7 +18,7 @@ router.get("/", (req, res) => {
 });
 
 //Get Specified Post by ID.
-router.get("/:id", async (req, res) => {
+router.get("/:id", (req, res) => {
     const id = req.params.id;
     
     db.getPostById(id)
@@ -26,13 +26,32 @@ router.get("/:id", async (req, res) => {
             if(post) {
                 res.status(200).json(post)
             } else {
-                res.status(404).json({ message: "The specified post does not exist."})
+                res.status(404).json({ message: "The specified post does not exist." })
             }
         })
         .catch(err => {
             res.status(500).json(err.message)
         })
 });
+
+// Get steps specific to a post
+router.get("/:id/steps", (req, res) => {
+    const {id} = req.params;
+
+    db.getStepsByPostId(id)
+        .then(steps => {
+            if(!steps) {
+                res.status(400).json({ message: "The specified post does not exist." })
+            } else if(steps.length) {
+                res.status(200).json(steps);
+            } else {
+                res.status(404).json({ message: "No steps exist for the specified post." })
+            }
+        })
+        .catch(err => {
+            res.status(500).json(err.message);
+        })
+})
 
 //Create New Post.
 router.post("/", (req, res) => {
