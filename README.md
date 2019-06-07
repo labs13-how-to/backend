@@ -21,13 +21,15 @@ To get the server running locally:
 
 ## 2️⃣ Endpoints
 
+#### Authentication Route
+
 Utilizing passport we have implemented an authorization process using the google strategy that allows users to be login using an active gmail account.
 
-#### Authentication Routes
-
-| Method | Endpoint       | Access Control | Description                        |
-| ------ | -------------- | -------------- | ---------------------------------- |
-| GET    | `/auth/google` | Account Owner  | Allows a registered user to login. |
+| Method | Endpoint                | Access Control | Description                                                                    |
+| ------ | ----------------------- | -------------- | ------------------------------------------------------------------------------ |
+| GET    | `/auth/google`          | Account Owner  | Allows a registered user to login.                                             |
+| GET    | `/auth/google/callback` | Account Owner  | If successful auth - redirects to front end home, if not - redirects to /login |
+| GET    | `/auth/logout`          | Account Owner  | Allows a registered user to logout of session, redirects to home               |
 
 #### User Routes
 
@@ -75,7 +77,33 @@ Utilizing passport we have implemented an authorization process using the google
 | GET    | `/favorites/:id`                         | users | Returns info for a single favorite. |
 | GET    | `/favorites/users/:userId/posts/:postId` | users | Returns info for a single user.     |
 | POST   | `/favorites/users/:userId`               | users | Create a new favorite.              |
-| DELETE | `/favorites/:id`                         | users | Delete an existing favorite.       |
+| DELETE | `/favorites/:id`                         | users | Delete an existing favorite.        |
+
+#### Tags Routes
+
+| Method | Endpoint    | Access Control | Description                 |
+| ------ | ----------- | -------------- | --------------------------- |
+| GET    | `/tags`     | owners         | Returns all available tags. |
+| POST   | `/tags`     | owners         | Creates a new tag.          |
+| PUT    | `/tags/:id` | owners         | Modify an existing tag.     |
+| DELETE | `/tags/:id` | owners         | Delete a tag.               |
+
+#### Reviews Routes
+
+| Method | Endpoint                   | Access Control  | Description                             |
+| ------ | -------------------------- | --------------- | --------------------------------------- |
+| GET    | `/posts/:id/reviews`       | all users       | Returns all reviews on a specific post. |
+| GET    | `/posts/reviews/:rId`      | all users       | Returns a specific review               |
+| GET    | `/posts/user/:uId/reviews` | all users       | Returns all reviews by a specific user. |
+| POST   | `/posts/:id/reviews`       | registered user | Creates a new review.                   |
+| PUT    | `/posts/reviews/:rId`      | review creator  | Modifies an existing review.            |
+| DELETE | `/posts/reviews/:rId`      | review creator  | Deletes a review.                       |
+
+#### Image Upload Route
+
+| Method | Endpoint  | Access Control | Description                         |
+| ------ | --------- | -------------- | ----------------------------------- |
+| POST   | `/upload` | owners         | Upload/store an image on cloudinary |
 
 #### Comments Routes
 
@@ -86,8 +114,8 @@ Utilizing passport we have implemented an authorization process using the google
 | GET    | `/comments/:id`                         | users | Returns info for a single comment. |
 | GET    | `/comments/users/:userId/posts/:postId` | users | Returns info for a single comment. |
 | POST   |  `/comments/users/:userId`              | users | Create a new comment.              |
-| PUT    | `/comments:id`                          | users | Modify an existing comment.         |
-| DELETE | `/comments/:id`                         | users | Delete an existing comment.       |
+| PUT    | `/comments:id`                          | users | Modify an existing comment.        |
+| DELETE | `/comments/:id`                         | users | Delete an existing comment.        |
 
 **GET /posts**
 
@@ -244,26 +272,6 @@ Returns with a success message. All needed data is pulled from the route.
 
 Returns with a success message. All needed data is pulled from the route.
 
-#### Tags Routes
-
-| Method | Endpoint    | Access Control | Description                 |
-| ------ | ----------- | -------------- | --------------------------- |
-| GET    | `/tags`     | owners         | Returns all available tags. |
-| POST   | `/tags`     | owners         | Creates a new tag.          |
-| PUT    | `/tags/:id` | owners         | Modify an existing tag.     |
-| DELETE | `/tags/:id` | owners         | Delete a tag.               |
-
-#### Reviews Routes
-
-| Method | Endpoint                   | Access Control  | Description                             |
-| ------ | -------------------------- | --------------- | --------------------------------------- |
-| GET    | `/posts/:id/reviews`       | all users       | Returns all reviews on a specific post. |
-| GET    | `/posts/reviews/:rId`      | all users       | Returns a specific review               |
-| GET    | `/posts/user/:uId/reviews` | all users       | Returns all reviews by a specific user. |
-| POST   | `/posts/:id/reviews`       | registered user | Creates a new review.                   |
-| PUT    | `/posts/reviews/:rId`      | review creator  | Modifies an existing review.            |
-| DELETE | `/posts/reviews/:rId`      | review creator  | Deletes a review.                       |
-
 # 2️⃣ Data Model
 
 #### USERS
@@ -418,17 +426,20 @@ Upon registration you can either receive an automatically generated cloud name o
 
 create a .env file that includes the following:
 
-_ PORT - what port the server will run on
-_ HOST - set to "localhost" for "development" and "testing" environments
-_ DB_DEV - the name of the local PostgreSQL database cluster for development
-_ DB\*TEST - the name of the local PostgreSQL database cluster for testing
-
+- PORT - what port the server will run on
+- HOST - set to "localhost" for "development" and "testing" environments
+- DB_DEV - the name of the local PostgreSQL database cluster for development
+- DB_TEST - the name of the local PostgreSQL database cluster for testing
 - USER - the username set for your local PostgreSQL server
-  _ PASS - the password set for your local PostgreSQL server
-  _ JWT\*SECRET - the secret used to encode JSON Web Tokens
-- CLOUDINARY\*CLOUD_NAME - the name given to your personal cloud
-- CLOUDINARY\*API_KEY - the api key provided by cloudinary
+- PASS - the password set for your local PostgreSQL server
+- JWT_SECRET - the secret used to encode JSON Web Tokens
+- CLOUDINARY_CLOUD_NAME - the name given to your personal cloud
+- CLOUDINARY_API_KEY - the api key provided by cloudinary
 - CLOUDINARY_API_SECRET - the api secret provided by cloudinary
+- GOOGLE_CLIENT_ID - The client ID provided by google after successfully registering the project on the google API console
+- GOOGLE_CLIENT_SECRET - The client secret provided by google after successfully registering the project on the google API console
+- BE_URL - The localhost url or the deployed application url: http://localhost:5000 or https://lambda-how-to.herokuapp.com
+- FE_URL - The localhost url or the deployed application url: http://localhost:3000 or https://how-tutor.netlify.com
 
 ## Contributing
 
