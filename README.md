@@ -25,9 +25,11 @@ To get the server running locally:
 
 Utilizing passport we have implemented an authorization process using the google strategy that allows users to be login using an active gmail account.
 
-| Method | Endpoint       | Access Control | Description                        |
-| ------ | -------------- | -------------- | ---------------------------------- |
-| GET    | `/auth/google` | Account Owner  | Allows a registered user to login. |
+| Method | Endpoint                | Access Control | Description                                                                    |
+| ------ | ----------------------- | -------------- | ------------------------------------------------------------------------------ |
+| GET    | `/auth/google`          | Account Owner  | Allows a registered user to login.                                             |
+| GET    | `/auth/google/callback` | Account Owner  | If successful auth - redirects to front end home, if not - redirects to /login |
+| GET    | `/auth/logout`          | Account Owner  | Allows a registered user to logout of session, redirects to home               |
 
 #### User Routes
 
@@ -56,8 +58,8 @@ Utilizing passport we have implemented an authorization process using the google
 
 #### Favorites Routes
 
-| Method | Endpoint                                 | Access Control      | Description           |
-| ------ | ---------------------------------------- | ------------------- | --------------------- |
+| Method | Endpoint                                 | AC    | Description                         |
+| ------ | ---------------------------------------- | ----- | ----------------------------------- |
 | GET    | `/favorites/users/:userId`               | users | Returns favorites of a user.        |
 | GET    | `/posts/:postId/favorites`               | users | Returns favorites of a post.        |
 | GET    | `/favorites/:id`                         | users | Returns info for a single favorite. |
@@ -87,9 +89,9 @@ Utilizing passport we have implemented an authorization process using the google
 
 #### Image Upload Route
 
-| Method | Endpoint                   | Access Control  | Description                             |
-| ------ | -------------------------- | --------------- | --------------------------------------- |
-| POST   | `/upload`                  | owners          | Upload/store an image on cloudinary     |
+| Method | Endpoint  | Access Control | Description                         |
+| ------ | --------- | -------------- | ----------------------------------- |
+| POST   | `/upload` | owners         | Upload/store an image on cloudinary |
 
 **GET /posts**
 
@@ -245,7 +247,6 @@ Returns with a success message. All needed data is pulled from the route.
 **DELETE /posts/:id/steps/:step_id**
 
 Returns with a success message. All needed data is pulled from the route.
-
 
 # 2️⃣ Data Model
 
@@ -414,6 +415,7 @@ create a .env file that includes the following:
 - GOOGLE_CLIENT_ID - The client ID provided by google after successfully registering the project on the google API console
 - GOOGLE_CLIENT_SECRET - The client secret provided by google after successfully registering the project on the google API console
 - BE_URL - The localhost url or the deployed application url: http://localhost:5000 or https://lambda-how-to.herokuapp.com
+- FE_URL - The localhost url or the deployed application url: http://localhost:3000 or https://how-tutor.netlify.com
 
 ## Contributing
 
