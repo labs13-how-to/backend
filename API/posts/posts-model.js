@@ -54,8 +54,25 @@ function getPostById(id) {
 }
 
 function getStepsByPostId(post_id) {
-  return db("post_steps")
-    .where({post_id});
+  return new Promise(async (resolve, reject) => {
+    let post, steps;
+    try {
+      // Use knex transaction to only call to DB once
+      await db.transaction(async trx => {
+        post = await db("posts")
+          .where({id: post_id})
+          .transacting(trx);
+        steps = await db("post_steps")
+          .where({post_id})
+          .transacting(trx);
+      })
+      !post.length
+        ? resolve(null)
+        : resolve(steps);
+    } catch (err) {
+      reject(err);
+    }
+  })
 }
 
 async function createPost(post) {

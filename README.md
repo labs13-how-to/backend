@@ -44,6 +44,7 @@ Utilizing passport we have implemented an authorization process using the google
 | ------ | --------------------------- | ---------------- | --------------------------- |
 | GET    | `/posts`                    | all users        | Returns all posts.          |
 | GET    | `/posts/:id`                | all users        | Returns the specified post. |
+| GET    | `/posts/:id/steps`          | all users        | Gets steps for a specific post.  |
 | POST   | `/posts`                    | registered users | Create a new post.          |
 | POST   | `/posts/:id/tags`           | post creator     | Adds a tag to a post.       |
 | POST   | `/posts/:id/steps`          | post creator     | Adds a step to a post.      |

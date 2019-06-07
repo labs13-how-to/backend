@@ -26,7 +26,7 @@ router.get("/:id", (req, res) => {
             if(post) {
                 res.status(200).json(post)
             } else {
-                res.status(404).json({ message: "The specified post does not exist."})
+                res.status(404).json({ message: "The specified post does not exist." })
             }
         })
         .catch(err => {
@@ -36,11 +36,13 @@ router.get("/:id", (req, res) => {
 
 // Get steps specific to a post
 router.get("/:id/steps", (req, res) => {
-    const id = req.params.id;
+    const {id} = req.params;
 
     db.getStepsByPostId(id)
         .then(steps => {
-            if(steps) {
+            if(!steps) {
+                res.status(400).json({ message: "The specified post does not exist." })
+            } else if(steps.length) {
                 res.status(200).json(steps);
             } else {
                 res.status(404).json({ message: "No steps exist for the specified post." })
