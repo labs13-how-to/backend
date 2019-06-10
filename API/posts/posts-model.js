@@ -63,7 +63,7 @@ function getAllPosts() {
   })
 }
 
-function getPostById(id) {
+function getPostById(post_id) {
   // Use promise for router error handling
   return new Promise(async (resolve, reject) => {
     let post, steps;
@@ -72,25 +72,31 @@ function getPostById(id) {
       await db.transaction(async trx => {
         // Grab the specified post
         post = await db("posts")
-          .where({ id })
+          .where({ id: post_id })
           .first()
           .returning("*")
           .transacting(trx);
         // Grab the tags for that post
         tags = await db("post_tags as pt")
           .select("pt.*", "t.name")
-          .where({ post_id: id })
+          .where({ post_id })
           .join("tags as t", { "t.id": "pt.tag_id" })
           .transacting(trx);
         // Grab the steps for that post
         steps = await db("post_steps")
-          .where({ post_id: id })
+          .where({ post_id })
           .orderBy("step_num")
           .transacting(trx);
+        reviews = await db("user_post_reviews")
+          .where({post_id});
+        comments = await db("user_post_comments")
+          .where({post_id});
+        favorites = await db("user_favorites")
+          .where({post_id});
       });
       !post
         ? resolve(null) // If post doesn't exist, return null to trigger 404
-        : resolve({ ...post, tags, steps });
+        : resolve({ ...post, tags, steps, reviews, comments, favorites });
     } catch (err) {
       reject(err);
     }
