@@ -24,7 +24,7 @@ const httpsImgs = [
 ]
 
 const generatePosts = async () => {
-  const difficulty = ["easy", "intermediate", "advanced", "professional"];
+  const difficulty = ["Very Easy", "Easy", "Moderate", "Hard", "Very Hard"];
   let arr = [];
 
   for (let i = 0; i <= 4; i++) {
@@ -35,7 +35,7 @@ const generatePosts = async () => {
         img_url: httpsImgs[Math.floor(Math.random() * 20)],
         description: faker.lorem.sentences(),
         difficulty: difficulty[Math.floor(Math.random() * difficulty.length)],
-        duration: faker.random.number(),
+        duration: `${Math.ceil(Math.random() * 12)} hours, ${Math.floor(Math.random()*12)*5} minutes`,
         skills: faker.lorem.words(),
         supplies: faker.lorem.words()
       });
