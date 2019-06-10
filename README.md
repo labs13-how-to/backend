@@ -133,7 +133,7 @@ Returns an array of objects with top-level details (not including steps):
         "name": STRING
       }],
       "review_count": INTEGER,
-      "review_avg": NUMBER,
+      "review_avg": DECIMAL,
       "comments": INTEGER,
       "favorites": INTEGER
     }
