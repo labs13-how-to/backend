@@ -31,7 +31,7 @@ const generatePosts = async () => {
     for (let x = 1; x <= 4; x++) {      
       arr.push({
         created_by: x,
-        title: faker.lorem.word(),
+        title: faker.lorem.words(),
         img_url: httpsImgs[Math.floor(Math.random() * 20)],
         description: faker.lorem.sentences(),
         difficulty: difficulty[Math.floor(Math.random() * difficulty.length)],
