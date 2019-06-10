@@ -16,7 +16,51 @@ module.exports = {
 };
 
 function getAllPosts() {
-  return db("posts");
+  return new Promise(async (resolve, reject) => {
+    let posts, reviews;
+    try {
+      await db.transaction(async trx => {
+        posts = await db("posts as p")
+          .select("p.*", "u.username")
+          .join("users as u", {"p.created_by": "u.id"});
+        reviews = await db("user_post_reviews")
+          .select("post_id")
+          .count("*")
+          .avg("rating")
+          .groupBy("post_id");
+        comments = await db("user_post_comments")
+          .select("post_id")
+          .count("*")
+          .groupBy("post_id");
+        favorites = await db("user_favorites")
+          .select("post_id")
+          .count("*")
+          .groupBy("post_id");
+      })
+      posts = posts.map(post => {
+        reviews.forEach(reviewed => {
+          if(reviewed.post_id === post.id) {
+            post.review_count = reviewed.count;
+            post.review_avg = reviewed.avg;
+          }
+        })
+        comments.forEach(commented => {
+          if(commented.post_id === post.id) {
+            post.comments = commented.count;
+          }
+        })
+        favorites.forEach(favorited => {
+          if(favorited.post_id === post.id) {
+            post.favorites = favorited.count;
+          }
+        })
+        return post;
+      })
+      resolve(posts)
+    } catch(err) {
+      reject(err);
+    }
+  })
 }
 
 function getPostById(id) {
