@@ -124,7 +124,18 @@ Returns an array of objects with top-level details (not including steps):
       "skills": TEXT,
       "supplies": TEXT,
       "created_by": INTEGER,
-      "created_at": TIMESTAMP WITHOUT TIMEZONE
+      "created_at": TIMESTAMP WITHOUT TIMEZONE,
+      "username": "Sibyl Runolfsdottir",
+      "tags": [{
+        "id": INTEGER,
+        "post_id": INTEGER,
+        "tag_id": INTEGER,
+        "name": STRING
+      }],
+      "review_count": INTEGER,
+      "review_avg": NUMBER,
+      "comments": INTEGER,
+      "favorites": INTEGER
     }
   ]
 }
@@ -163,7 +174,31 @@ Returns an object with the following format:
       "instruction": TEXT,
       "img_url": STRING,
       "vid_url": STRING
-    }
+    },
+    "reviews": [
+      {
+        "id": INTEGER,
+        "user_id": INTEGER,
+        "post_id": INTEGER,
+        "rating": INTEGER,
+        "review": TEXT
+      }
+    ],
+    "comments": [
+      {
+        "id": INTEGER,
+        "user_id": INTEGER,
+        "post_id": INTEGER,
+        "comment": TEXT
+      }
+    ],
+    "favorites": [
+      {
+        "id": INTEGER,
+        "user_id": INTEGER,
+        "post_id": INTEGER
+      },
+    ]
   ]
 }
 ```
