@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
 
 // Generate JWT
-async function genToken(user) {
-  const { id, username, role } = user[0];
-  const payload = { subject: id, username, role };
+function genToken(user) {
+  const { id, displayName } = user;
+  const payload = { subject: id, username: displayName };
   const jwtSecret = process.env.JWT_SECRET;
   const opt = { expiresIn: "2h" };
   return jwt.sign(payload, jwtSecret, opt);
