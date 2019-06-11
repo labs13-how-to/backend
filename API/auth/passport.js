@@ -3,8 +3,6 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 require("dotenv").config();
 
-const jwtSecret = process.env.JWT_SECRET;
-
 module.exports = function(passport) {
   passport.serializeUser(function(user, done) {
     // done(null, user.id);
@@ -23,7 +21,6 @@ module.exports = function(passport) {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        // callbackURL: 'http://localhost:5000/auth/google/callback'
         callbackURL: `${process.env.BE_URL}/auth/google/callback`
       },
       async (accessToken, refreshToken, profile, done) => {
