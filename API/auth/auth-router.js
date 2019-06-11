@@ -59,21 +59,26 @@ const bcrypt = require("bcryptjs");
 // GET route for when you click on login - passport authenticates through google
 router.get(
   "/google",
-  passport.authenticate("google", { scope: ["openid email profile"] }),
-  function(request, response) {
-    response.setHeader("Access-Control-Allow-Origin");
-  }
+  passport.authenticate("google", {
+    session: false,
+    scope: ["openid email profile"]
+  })
 );
 
-// If successful auth - redirects to front end home page, if not - redirects to /login
+// If successful auth - redirects to front end home page with token
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "/login"
+    failureRedirect: `${process.env.FE_URL}`,
+    session: false
   }),
-  function(request, response) {
+  (request, response) => {
     // Authenticated successfully
-    response.redirect(`${process.env.FE_URL}`);
+    console.log("HERE IS THE USER", request.user);
+    const token = jwt.genToken(request.user);
+    console.log("token:", token);
+    const redirectURL = `${process.env.FE_URL}?token=` + token;
+    response.redirect(redirectURL);
   }
 );
 
