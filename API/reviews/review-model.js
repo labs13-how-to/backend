@@ -10,8 +10,10 @@ module.exports = {
 }
 
 function get(id) {
-    return db("user_post_reviews")
-        .where({ post_id: id })
+    return db("user_post_reviews as upr")
+        .select("upr.*", "u.username")
+        .where({ "upr.post_id": id })
+        .join("users as u", {"upr.user_id": "u.id"})
 };
 
 function getByUser(uId) {

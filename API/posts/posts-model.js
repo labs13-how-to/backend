@@ -16,10 +16,71 @@ module.exports = {
 };
 
 function getAllPosts() {
-  return db("posts");
+  return new Promise(async (resolve, reject) => {
+    let posts, reviews;
+    try {
+      await db.transaction(async trx => {
+        posts = await db("posts as p")
+          .select("p.*", "u.username")
+          .join("users as u", {"p.created_by": "u.id"})
+          .transacting(trx);
+        reviews = await db("user_post_reviews")
+          .select("post_id")
+          .count("*")
+          .avg("rating")
+          .groupBy("post_id")
+          .transacting(trx);
+        comments = await db("user_post_comments")
+          .select("post_id")
+          .count("*")
+          .groupBy("post_id")
+          .transacting(trx);
+        favorites = await db("user_favorites")
+          .select("post_id")
+          .count("*")
+          .groupBy("post_id");
+        tags = await db("post_tags as pt")
+          .select("pt.*", "t.name")
+          .join("tags as t", {"pt.tag_id": "t.id"})
+          .transacting(trx);
+      })
+      posts = posts.map(post => {
+        post.tags = [];
+        tags.forEach(tagged => {
+          if(tagged.post_id === post.id) {
+            post.tags.push(tagged);
+          }
+        })
+        post.review_count = 0;
+        post.review_avg = 0;
+        reviews.forEach(reviewed => {
+          if(reviewed.post_id === post.id) {
+            post.review_count = Number(reviewed.count);
+            post.review_avg = Number(reviewed.avg);
+          }
+        })
+        post.comments = 0;
+        comments.forEach(commented => {
+          if(commented.post_id === post.id) {
+            post.comments = Number(commented.count);
+          }
+        })
+        post.favorites = 0;
+        favorites.forEach(favorited => {
+          if(favorited.post_id === post.id) {
+            post.favorites = Number(favorited.count);
+          }
+        })
+        return post;
+      })
+      resolve(posts)
+    } catch(err) {
+      reject(err);
+    }
+  })
 }
 
-function getPostById(id) {
+function getPostById(post_id) {
   // Use promise for router error handling
   return new Promise(async (resolve, reject) => {
     let post, steps;
@@ -27,26 +88,33 @@ function getPostById(id) {
       // Use knex transaction to only call to DB once
       await db.transaction(async trx => {
         // Grab the specified post
-        post = await db("posts")
-          .where({ id })
+        post = await db("posts as p")
+          .select("p.*", "u.username")
+          .where({ "p.id": post_id })
+          .join("users as u", {"p.created_by": "u.id"})
           .first()
-          .returning("*")
           .transacting(trx);
         // Grab the tags for that post
         tags = await db("post_tags as pt")
           .select("pt.*", "t.name")
-          .where({ post_id: id })
+          .where({ post_id })
           .join("tags as t", { "t.id": "pt.tag_id" })
           .transacting(trx);
         // Grab the steps for that post
         steps = await db("post_steps")
-          .where({ post_id: id })
+          .where({ post_id })
           .orderBy("step_num")
           .transacting(trx);
+        reviews = await db("user_post_reviews")
+          .where({post_id});
+        comments = await db("user_post_comments")
+          .where({post_id});
+        favorites = await db("user_favorites")
+          .where({post_id});
       });
       !post
         ? resolve(null) // If post doesn't exist, return null to trigger 404
-        : resolve({ ...post, tags, steps });
+        : resolve({ ...post, tags, steps, reviews, comments, favorites });
     } catch (err) {
       reject(err);
     }
