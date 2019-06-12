@@ -1,6 +1,7 @@
 const router = require("express").Router();
-
 const db = require("./user-model.js");
+const bcrypt = require("bcryptjs");
+
 
 //Get All Users
 router.get("/", (req, res) => {
@@ -50,6 +51,23 @@ router.get("/:id/posts", async (req, res) => {
       message: "Error getting the posts for the user"
     });
   }
+});
+
+// Simple register
+router.post("/", (req, res) => {
+  let user = req.body;
+  const hash = bcrypt.hashSync(user.password, 12);
+  user.password = hash;
+  db.createUser(user)
+    .then(user => {
+      res.status(201).json({ user });
+    })
+    .catch(err => {
+      res.status(500).json({
+        err: err.message,
+        error: "Could not create the new user"
+      });
+    });
 });
 
 //Update User Info

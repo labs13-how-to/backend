@@ -5,7 +5,8 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
-  getUserPosts
+  getUserPosts,
+  createUser
 };
 
 function getAllUsers() {
@@ -32,6 +33,12 @@ function getUserPosts(userId) {
       "p.created_at"
     )
     .where("p.created_by", userId);
+}
+
+function createUser(user) {
+  return db("users")
+    .insert(user)
+    .returning("*");
 }
 
 function updateUser(id, changes) {
