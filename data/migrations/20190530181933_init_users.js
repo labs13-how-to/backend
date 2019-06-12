@@ -4,13 +4,15 @@ exports.up = function(knex, Promise) {
 
     users
       .string("auth_id")
-      .notNullable()
       .unique();
 
     users
       .string("username")
       .notNullable()
       .unique();
+
+    users
+      .string("password")
 
     users
       .string("role")
