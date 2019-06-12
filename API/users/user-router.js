@@ -74,11 +74,13 @@ router.post("/", (req, res) => {
 router.put("/:id", (req, res) => {
   const id = req.params.id;
   const changes = req.body;
+  const hash = bcrypt.hashSync(changes.password, 12);
+  changes.password = hash;
 
   db.updateUser(id, changes)
     .then(changes => {
       if (changes) {
-        res.status(200).json({ message: "User successfully updated." });
+        res.status(200).json({ changes: changes, message: "User successfully updated." });
       } else {
         res.status(404).json({ message: "The specified user does not exist." });
       }
