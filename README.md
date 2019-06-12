@@ -38,6 +38,7 @@ Utilizing passport we have implemented an authorization process using the google
 | GET    | `/users`          | all users           | Returns info for the logged in user. |
 | GET    | `/users/:id`      | users, supervisors  | Returns info for a single user.      |
 | GET    | `/users/:id/post` | users, supervisors  | Returns all posts for a single user. |
+| POST   | `/users`          | users               | Create a new user.                   |
 | PUT    | `/users/:id`      | owners, supervisors | Modify existing user info.           |
 | DELETE | `/users/:id`      | owners, supervisors | Delete an existing user account.     |
 
