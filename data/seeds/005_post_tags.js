@@ -4,7 +4,7 @@ const generateSeeds = () => {
   for (let i = 0; i < numOfReviews; i++) {
     arr.push({
       post_id: Math.ceil(Math.random() * 20),
-      tag_id: Math.ceil(Math.random() * 20)
+      tag_id: Math.ceil(Math.random() * 15)
     });
   }
   return arr;
