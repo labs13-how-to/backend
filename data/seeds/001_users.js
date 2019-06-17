@@ -1,15 +1,18 @@
 const faker = require("faker");
-const {genUniqueArr} = require("../helpers.js");
+const { genUniqueArr } = require("../helpers.js");
 
 const generateSeeds = () => {
   const numOfUsers = 500;
   const usernameUnique = genUniqueArr(numOfUsers, faker.name.findName);
-  const auth_idUnique = genUniqueArr(numOfUsers, () => `${(Math.floor(Math.random() * 99999999999) + 900000000000)}`);
+  // const auth_idUnique = genUniqueArr(
+  //   numOfUsers,
+  //   () => `${Math.floor(Math.random() * 99999999999) + 900000000000}`
+  // );
   let arr = [];
   for (let i = 0; i < numOfUsers; i++) {
     arr.push({
       username: usernameUnique[i],
-      auth_id: auth_idUnique[i],
+      auth_id: `${90000000000 + i}`,
       role: "user"
     });
   }

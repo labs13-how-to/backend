@@ -5,6 +5,7 @@ require("dotenv").config();
 
 module.exports = function(passport) {
   passport.serializeUser(function(user, done) {
+    console.log("USER", user);
     // done(null, user.id);
     done(null, user);
   });

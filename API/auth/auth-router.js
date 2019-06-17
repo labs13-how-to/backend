@@ -77,7 +77,9 @@ router.get(
     console.log("HERE IS THE USER", request.user);
     const token = jwt.genToken(request.user);
     console.log("token:", token);
-    const redirectURL = `${process.env.FE_URL}?token=` + token;
+    const user = request.user.id;
+    const redirectURL =
+      `${process.env.FE_URL}?token=` + token + `&user=` + user;
     response.redirect(redirectURL);
   }
 );
