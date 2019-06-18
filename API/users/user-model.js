@@ -15,13 +15,13 @@ function getAllUsers() {
 
 function getUserById(id) {
   return db("users")
-    .where({ id })
+    .where({ "users.auth_id": id })
     .first();
 }
 
 function getUserPosts(userId) {
   return db("posts as p")
-    .join("users as u", "u.id", "p.created_by")
+    .join("users as u", "u.auth_id", "p.created_by")
     .select(
       "u.username",
       "p.img_url",
@@ -30,7 +30,8 @@ function getUserPosts(userId) {
       "p.duration",
       "p.skills",
       "p.supplies",
-      "p.created_at"
+      "p.created_at",
+      "p.id"
     )
     .where("p.created_by", userId);
 }

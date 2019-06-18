@@ -74,16 +74,18 @@ router.get(
   }),
   (request, response) => {
     // Authenticated successfully
-    console.log("HERE IS THE USER", request.user);
+    console.log("HERE IS THE USER", request.user)
     const token = jwt.genToken(request.user);
     console.log("token:", token);
-    const redirectURL = `${process.env.FE_URL}?token=` + token;
+    const user = request.user.id;
+    const redirectURL =
+      `${process.env.FE_URL}?token=` + token + `&user=` + user;
     response.redirect(redirectURL);
   }
 );
 
 // GET logout route - will sign person out of session
-router.get("/logout", function(request, response) {
+router.get("/logout", function (request, response) {
   request.logout();
   response.redirect("/");
 });
