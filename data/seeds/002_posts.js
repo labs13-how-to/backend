@@ -28,14 +28,14 @@ const generatePosts = async () => {
   let arr = [];
 
   for (let i = 0; i <= 4; i++) {
-    for (let x = 1; x <= 4; x++) {      
+    for (let x = 1; x <= 4; x++) {
       arr.push({
-        created_by: x,
+        created_by: `${90000000000 + x}`,
         title: faker.lorem.words(),
         img_url: httpsImgs[Math.floor(Math.random() * 20)],
         description: faker.lorem.sentences(),
         difficulty: difficulty[Math.floor(Math.random() * difficulty.length)],
-        duration: `${Math.ceil(Math.random() * 12)} hours, ${Math.floor(Math.random()*12)*5} minutes`,
+        duration: `${Math.ceil(Math.random() * 12)} hours, ${Math.floor(Math.random() * 12) * 5} minutes`,
         skills: faker.lorem.words(),
         supplies: faker.lorem.words()
       });
@@ -44,14 +44,14 @@ const generatePosts = async () => {
   return arr;
 };
 
-exports.seed = async function(knex, Promise) {
+exports.seed = async function (knex, Promise) {
   const posts = await generatePosts();
 
   return (
     knex
       // Deletes ALL existing entries for posts table
       .raw("TRUNCATE TABLE posts RESTART IDENTITY CASCADE")
-      .then(function() {
+      .then(function () {
         return knex("posts").insert(posts);
       })
   );
