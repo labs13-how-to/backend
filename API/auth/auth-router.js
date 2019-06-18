@@ -74,7 +74,7 @@ router.get(
   }),
   (request, response) => {
     // Authenticated successfully
-    console.log("HERE IS THE USER", request.user);
+    console.log("HERE IS THE USER", request.user)
     const token = jwt.genToken(request.user);
     console.log("token:", token);
     const user = request.user.id;
@@ -85,7 +85,7 @@ router.get(
 );
 
 // GET logout route - will sign person out of session
-router.get("/logout", function(request, response) {
+router.get("/logout", function (request, response) {
   request.logout();
   response.redirect("/");
 });

@@ -30,7 +30,8 @@ function getUserPosts(userId) {
       "p.duration",
       "p.skills",
       "p.supplies",
-      "p.created_at"
+      "p.created_at",
+      "p.id"
     )
     .where("p.created_by", userId);
 }
