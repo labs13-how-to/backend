@@ -33,6 +33,7 @@ const generatePosts = async () => {
         created_by: `${90000000000 + x}`,
         title: faker.lorem.words(),
         img_url: httpsImgs[Math.floor(Math.random() * 20)],
+        vid_url: "https://www.youtube.com/watch?v=Kt-tLuszKBA",
         description: faker.lorem.sentences(),
         difficulty: difficulty[Math.floor(Math.random() * difficulty.length)],
         duration: `${Math.ceil(Math.random() * 12)} hours, ${Math.floor(Math.random() * 12) * 5} minutes`,
