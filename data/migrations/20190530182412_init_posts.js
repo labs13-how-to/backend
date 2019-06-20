@@ -8,6 +8,8 @@ exports.up = function (knex, Promise) {
     posts.string('img_url')
       .notNullable();
 
+    posts.string('vid_url') //* column for video */
+
     posts.text('description')
       .notNullable();
 
