@@ -20,10 +20,12 @@ router.get("/", (req, res) => {
 
 //Get Specific User By ID
 router.get("/:id", (req, res) => {
-  const id = req.params.id;
+  const id = req.params.id
+  console.log("ID", id)
 
   db.getUserById(id)
     .then(user => {
+      console.log("user", user)
       if (user) {
         res.status(200).json(user);
       } else {
@@ -39,6 +41,7 @@ router.get("/:id", (req, res) => {
 router.get("/:id/posts", async (req, res) => {
   try {
     const posts = await db.getUserPosts(req.params.id);
+    console.log(req.params.id)
     console.log(posts.length);
     if (posts.length < 1) {
       res.status(404).json({ message: "This user has no posts" });
@@ -46,18 +49,15 @@ router.get("/:id/posts", async (req, res) => {
       res.status(200).json(posts);
     }
   } catch (error) {
-    console.log(error);
     res.status(500).json({
-      message: "Error getting the posts for the user"
+      message: error.message
     });
   }
 });
 
 // Simple register
 router.post("/", (req, res) => {
-  let user = req.body;
-  const hash = bcrypt.hashSync(user.password, 12);
-  user.password = hash;
+  let user = req.body
   db.createUser(user)
     .then(user => {
       res.status(201).json({ user });
