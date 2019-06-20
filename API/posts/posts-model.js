@@ -59,16 +59,16 @@ function getAllPosts() {
             post.review_avg = Number(reviewed.avg);
           }
         })
-        post.comments = 0;
+        post.comments_count = 0;
         comments.forEach(commented => {
           if (commented.post_id === post.id) {
-            post.comments = Number(commented.count);
+            post.comments_count = Number(commented.count);
           }
         })
-        post.favorites = 0;
+        post.favorites_count = 0;
         favorites.forEach(favorited => {
           if (favorited.post_id === post.id) {
-            post.favorites = Number(favorited.count);
+            post.favorites_count = Number(favorited.count);
           }
         })
         return post;
