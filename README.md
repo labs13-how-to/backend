@@ -1,3 +1,4 @@
+# Review It Yourself (formerly How To)
 # API Documentation
 
 #### 1️⃣ Backend deployed at [Heroku](https://lambda-how-to.herokuapp.com/) <br>
@@ -117,14 +118,15 @@ Returns an array of objects with top-level details (not including steps):
   [
     {
       "id": INTEGER,
-      "title": STRING,
+      "title": STRING, 
       "img_url": STRING,
+      "vid_url": STRING,
       "description": TEXT,
       "difficulty": STRING,
       "duration": STRING,
       "skills": TEXT,
       "supplies": TEXT,
-      "created_by": INTEGER,
+      "created_by": INTEGER, (auth_id)
       "created_at": TIMESTAMP WITHOUT TIMEZONE,
       "username": "Sibyl Runolfsdottir",
       "tags": [{
@@ -151,12 +153,13 @@ Returns an object with the following format:
   "id": INTEGER,
   "title": STRING,
   "img_url": STRING,
+  "vid_url": STRING,
   "description": TEXT,
   "difficulty": STRING,
   "duration": STRING,
   "skills": TEXT,
   "supplies": TEXT,
-  "created_by": INTEGER,
+  "created_by": INTEGER, (auth_id)
   "created_at": TIMESTAMP WITHOUT TIMEZONE,
   "tags": [
     {
@@ -206,29 +209,19 @@ Returns an object with the following format:
 
 **POST /posts**
 
-Returns the ID of the created post. Expects an object with the following format:
+Returns the ID of the created post. Required and optional inputs marked. Expects an object with the following format:
 
 ```
 {
-  "title": STRING,
-  "img_url": STRING,
-  "description": TEXT,
-  "difficulty": STRING,
-  "duration": STRING,
+  "title": STRING, // required
+  "img_url": STRING, // required
+  "vid_url": STRING, // optional
+  "description": TEXT, // required
+  "difficulty": STRING, // required
+  "duration": STRING, // required
   "skills": TEXT, // optional
   "supplies": TEXT, // optional
-  "created_by": INTEGER, // This will not be necessary once JWTs are being used
-}
-```
-
-**POST /posts/:id/tags**
-
-Returns the ID of the entry in the `post_tags` table that maps the tag to the post. Expects an object with the following format:
-
-```
-{
-  "post_id": INTEGER,
-  "tag_id": INTEGER
+  "created_by": INTEGER, // Auth_id
 }
 ```
 
@@ -239,10 +232,9 @@ Returns the ID of the step in the `post_steps` table. Expects an object with the
 ```
 {
   "step_num": INTEGER,
-  "title": STRING,
-  "instruction": TEXT,
-  "img_url": STRING, // optional
-  "vid_url": STRING // optional
+  "title": STRING, // required
+  "instruction": TEXT, // required
+  "img_url": STRING, // required
 },
 ```
 
@@ -254,6 +246,7 @@ Returns with a success message. Expects an object with any of the following data
 {
   "title": STRING,
   "img_url": STRING,
+  "vid_url": STRING,
   "description": TEXT,
   "difficulty": STRING,
   "duration": STRING,
@@ -323,6 +316,7 @@ Returns with a success message. All needed data is pulled from the route.
   id: INTEGER,
   title: STRING,
   img_url: STRING,
+  vid_url: STRING,
   description: TEXT,
   difficulty: STRING,
   duration: STRING,
@@ -426,11 +420,11 @@ Returns with a success message. All needed data is pulled from the route.
 
 `getTagsById` -> Returns all tags
 
-`addNew(tag)` -> Adds a new tag
+`addNew(element)` -> Adds a new element, ie post, post-step, review, comment
 
-`remove(id)` -> Removes a tag by Id
+`remove(id)` -> Removes an element by Id, ie post, post-step, review, comment
 
-`update(id, changes)` -> Edits a tag by id
+`update(id, changes)` -> Edits an element by id, ie post, post-step, review, comment
 
 `createPost(post)` -> Creates a new post and returns the Id
 
@@ -440,7 +434,14 @@ Returns with a success message. All needed data is pulled from the route.
 
 `googleFindUserById(profileId)` -> Returns the users table, selects user where auth_id: profileId(google)
 
-`googleCreateUser(user)` -> Matches the google account to the user object.
+`googleCreateUser(user)` -> Matches the google account to the user object
+
+`getByUser(id)` -> Matches specified element to the user
+
+`getByPost(id)` -> Matches specified element to the post
+
+`getId(id)` -> Returns specified element
+
 
 ## 3️⃣ Environment Variables
 
