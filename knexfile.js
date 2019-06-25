@@ -22,7 +22,7 @@ const dbSettings = (connection) => ({
     directory: './data/migrations'
   },
   seeds: {
-    directory: `./data/seeds`
+    directory: `./data/liveSeed`
   }
 });
 
