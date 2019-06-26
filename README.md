@@ -291,7 +291,64 @@ Returns with a success message. All needed data is pulled from the route.
 
 Returns with a success message. All needed data is pulled from the route.
 
+**GET /posts/:id/reviews**
+Returns an object with the following format:
+
+```
+{
+  "id": 4,
+  "user_id": INTEGER, (Auto-Incremental)
+  "auth_id": INTEGER, (Registered id #)
+  "post_id": INTEGER, (Foreign Key Linking Review to Post)
+  "rating": INTEGER,
+  "review": TEXT,
+  "username": TEXT, ie Jamey Sanford
+}
+```
+
+**GET /posts/reviews/:id**
+Returns an object with the following format:
+
+```
+{
+  "id": INTEGER,
+  "user_id": INTEGER, (Auto-Incremental)
+  "auth_id": INTEGER, (Registered id #)
+  "post_id": INTEGER, (Foreign Key Linking Review to Post)
+  "rating": INTEGER,
+  "review": TEXT,
+  "username": TEXT, ie Jamey Sanford
+}
+```
+
+**POST /posts/:id/reviews**
+Returns the newly created review object. Expects an object with the following format:
+
+```
+{
+  "user_id": INTEGER,
+  "auth_id": INTEGER, (Registered id #, Foreign Key to User)
+  "post_id": INTEGER, (Foreign Key Linking Review to Post)
+  "rating": INTEGER,
+  "review": TEXT,
+}
+```
+
+**PUT /posts/reviews/:id**
+Returns with a success message. Expects an object with any of the following data:
+
+```
+{
+  "rating": INTEGER,
+  "review": TEXT,
+}
+```
+
+**DELETE /posts/reviews/:id**
+Returns  with a success message. All needed data is pulled from the route.
+
 # 2️⃣ Data Model
+
 
 #### USERS
 
@@ -404,6 +461,19 @@ Returns with a success message. All needed data is pulled from the route.
 }
 ```
 
+#### REVIEWS
+---
+```
+{
+  "id": INTEGER, (Auto-Incremental)
+  "user_id": INTEGER, 
+  "auth_id": INTEGER, (Registered id #, Foreign Key to User)
+  "post_id": INTEGER, (Foreign Key Linking Review to Post)
+  "rating": INTEGER,
+  "review": TEXT,
+}
+```
+
 ## 2️⃣ Actions
 
 `createUser(user)` -> Creates a user in the users table and returns that user (used for registration)
@@ -416,21 +486,31 @@ Returns with a success message. All needed data is pulled from the route.
 
 `getAllPosts()` -> Returns all created posts
 
+`getUserPosts(userId)` -> Returns all posts by the specified user
+
 `getPostById(id)` -> Returns a specified post by Id
+
+`getStepsByPostId(post_id)` -> Returns all steps for specified post by Id
 
 `getTagsById` -> Returns all tags
 
-`addNew(element)` -> Adds a new element, ie post, post-step, review, comment
+`addNew(element)` -> Adds a new element, ie post, post-step, review
 
-`remove(id)` -> Removes an element by Id, ie post, post-step, review, comment
+`remove(id)` -> Removes an element by Id, ie post, post-step, review
 
-`update(id, changes)` -> Edits an element by id, ie post, post-step, review, comment
+`update(id, changes)` -> Edits an element by id, ie post, post-step, review
 
 `createPost(post)` -> Creates a new post and returns the Id
 
+`addPostStep(post_id, step)` -> Creates a new post-step, attached to the specified post
+
 `removePost(id)` -> Deletes a post
 
+`removePostStep(id)` -> Deletes a post-step
+
 `updatePost(id, changes)` -> Updates a post
+
+`updatePostStep(id, changes)` -> Updates a post-step
 
 `googleFindUserById(profileId)` -> Returns the users table, selects user where auth_id: profileId(google)
 
